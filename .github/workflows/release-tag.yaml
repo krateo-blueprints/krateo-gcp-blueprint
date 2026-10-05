@@ -48,13 +48,28 @@ jobs:
 
           shopt -s nullglob
           published=0
-          for chart in blueprints/*/*/chart operator/*; do
+          # operator/ FIRST: it is the part an install cannot proceed without, and GHCR starts
+          # rejecting pushes ("failed to perform Tag on destination: ... not found") once a run has
+          # pushed a couple of hundred artifacts. Publishing the operator last meant two runs in a
+          # row died before reaching it.
+          for chart in operator/* blueprints/*/*/chart; do
             [ -f "${chart}/Chart.yaml" ] || continue
             name=$(awk '/^name:/{print $2; exit}' "${chart}/Chart.yaml")
             echo "::group::${name} (${chart})"
             sed -i "s/CHART_VERSION/${VERSION}/g" "${chart}/Chart.yaml"
             helm package "${chart}" --destination .
-            helm push "${name}-${VERSION}.tgz" "${OCI_REPO}"
+            # Retry: that GHCR tag error is transient and a single push failure otherwise
+            # abandons every chart after it.
+            ok=0
+            for attempt in 1 2 3 4 5; do
+              if helm push "${name}-${VERSION}.tgz" "${OCI_REPO}"; then ok=1; break; fi
+              echo "push attempt ${attempt} failed for ${name}; retrying in $((attempt*10))s"
+              sleep $((attempt*10))
+            done
+            if [ "${ok}" -ne 1 ]; then
+              echo "::error::${name} failed to publish after 5 attempts"
+              exit 1
+            fi
             echo "Published ${OCI_REPO}/${name}:${VERSION}"
             published=$((published+1))
             echo "::endgroup::"
