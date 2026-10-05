@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema",
   "type": "object",
   "title": "Google Config Connector operator",
-  "description": "The Google Config Connector operator and its cluster-scoped ConfigConnector CR.",
+  "description": "The Google Config Connector operator and its cluster-scoped ConfigConnector CR. Note: no root-level `required` \u2014 core-provider turns this schema into the Composition CRD, so a required root key would force every Composition to restate it, and an installer that supplies only a subset gets 'spec.<key>: Required value' and wedges the whole reconcile. The chart's values.yaml carries the defaults instead.",
   "properties": {
     "operator": {
       "type": "object",
@@ -15,7 +15,9 @@
           "minLength": 1
         }
       },
-      "required": ["image"]
+      "required": [
+        "image"
+      ]
     },
     "configConnector": {
       "type": "object",
@@ -30,7 +32,10 @@
           "type": "string",
           "title": "Mode",
           "description": "cluster uses one Google service account for the whole cluster. namespaced uses a ConfigConnectorContext per namespace and requires Workload Identity.",
-          "enum": ["cluster", "namespaced"]
+          "enum": [
+            "cluster",
+            "namespaced"
+          ]
         },
         "credentialSecretName": {
           "type": "string",
@@ -43,8 +48,10 @@
           "description": "Google service account to impersonate via Workload Identity. Mutually exclusive with credentialSecretName."
         }
       },
-      "required": ["enabled", "mode"]
+      "required": [
+        "enabled",
+        "mode"
+      ]
     }
-  },
-  "required": ["operator", "configConnector"]
+  }
 }
