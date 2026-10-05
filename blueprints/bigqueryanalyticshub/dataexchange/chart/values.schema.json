@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Bigqueryanalyticshub BigQueryAnalyticsHubDataExchange via Config Connector. Fields mirror the bigqueryanalyticshub.cnrm.cloud.google.com/v1beta1 BigQueryAnalyticsHubDataExchange spec.",
+  "properties": {
+    "description": {
+      "description": "Optional. Description of the data exchange. The description must not contain Unicode non-characters as well as C0 and C1 control codes except tabs (HT), new lines (LF), carriage returns (CR), and page breaks (FF). Default value is an empty string. Max length: 2000 bytes.",
+      "type": "string"
+    },
+    "discoveryType": {
+      "description": "Optional. Type of discovery on the discovery page for all the listings under this exchange. Updating this field also updates (overwrites) the discovery_type field for all the listings under this exchange.",
+      "type": "string"
+    },
+    "displayName": {
+      "description": "Required. Human-readable display name of the data exchange. The display name must contain only Unicode letters, numbers (0-9), underscores (_), dashes (-), spaces ( ), ampersands (\u0026) and must not start or end with spaces. Default value is an empty string. Max length: 63 bytes.",
+      "type": "string"
+    },
+    "documentation": {
+      "description": "Optional. Documentation describing the data exchange.",
+      "type": "string"
+    },
+    "location": {
+      "description": "Immutable. The name of the location this data exchange.",
+      "type": "string"
+    },
+    "primaryContact": {
+      "description": "Optional. Email or URL of the primary point of contact of the data exchange. Max Length: 1000 bytes.",
+      "type": "string"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "projectRef": {
+      "description": "The project that this resource belongs to. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The `projectID` field of a project, when not managed by Config Connector.",
+          "type": "string"
+        },
+        "kind": {
+          "description": "The kind of the Project resource; optional but must be `Project` if provided.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The `name` field of a `Project` resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The `namespace` field of a `Project` resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "resourceID": {
+      "description": "Immutable. The BigQueryAnalyticsHubDataExchange name. If not given, the metadata.name will be used.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "location",
+    "projectRef"
+  ],
+  "title": "GCP Bigqueryanalyticshub BigQueryAnalyticsHubDataExchange",
+  "type": "object"
+}

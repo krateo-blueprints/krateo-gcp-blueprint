@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Networkservices NetworkServicesMesh via Config Connector. Fields mirror the networkservices.cnrm.cloud.google.com/v1beta1 NetworkServicesMesh spec.",
+  "properties": {
+    "description": {
+      "description": "Optional. A free-text description of the resource. Max length 1024 characters.",
+      "type": "string"
+    },
+    "interceptionPort": {
+      "description": "Optional. If set to a valid TCP port (1-65535), instructs the SIDECAR proxy to listen on the specified port of localhost (127.0.0.1) address. The SIDECAR proxy will expect all traffic to be redirected to this port regardless of its actual ip:port destination. If unset, a port '15001' is used as the interception port. This field is only valid if the type of Mesh is SIDECAR.",
+      "format": "int64",
+      "type": "integer"
+    },
+    "location": {
+      "description": "Immutable. The location for the resource",
+      "type": "string"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "projectRef": {
+      "description": "Immutable. The Project that this resource belongs to. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The project for the resource\n\nAllowed value: The Google Cloud resource name of a `Project` resource (format: `projects/{{name}}`).",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "location",
+    "projectRef"
+  ],
+  "title": "GCP Networkservices NetworkServicesMesh",
+  "type": "object"
+}

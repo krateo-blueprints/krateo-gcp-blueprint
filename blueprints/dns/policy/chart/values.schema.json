@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Dns DNSPolicy via Config Connector. Fields mirror the dns.cnrm.cloud.google.com/v1beta1 DNSPolicy spec.",
+  "properties": {
+    "alternativeNameServerConfig": {
+      "description": "Sets an alternative name server for the associated networks. When specified, all DNS queries are forwarded to a name server that you choose. Names such as .internal are not available when an alternative name server is specified.",
+      "properties": {
+        "targetNameServers": {
+          "description": "Sets an alternative name server for the associated networks. When specified, all DNS queries are forwarded to a name server that you choose. Names such as .internal are not available when an alternative name server is specified.",
+          "items": {
+            "properties": {
+              "forwardingPath": {
+                "description": "Forwarding path for this TargetNameServer. If unset or 'default' Cloud DNS will make forwarding decision based on address ranges, i.e. RFC1918 addresses go to the VPC, Non-RFC1918 addresses go to the Internet. When set to 'private', Cloud DNS will always send queries through VPC for this target Possible values: [\"default\", \"private\"].",
+                "type": "string"
+              },
+              "ipv4Address": {
+                "description": "IPv4 address to forward to.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "ipv4Address"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "targetNameServers"
+      ],
+      "type": "object"
+    },
+    "description": {
+      "description": "A textual description field. Defaults to 'Managed by Config Connector'.",
+      "type": "string"
+    },
+    "enableInboundForwarding": {
+      "description": "Allows networks bound to this policy to receive DNS queries sent by VMs or applications over VPN connections. When enabled, a virtual IP address will be allocated from each of the sub-networks that are bound to this policy.",
+      "type": "boolean"
+    },
+    "enableLogging": {
+      "description": "Controls whether logging is enabled for the networks bound to this policy. Defaults to no logging if not set.",
+      "type": "boolean"
+    },
+    "networks": {
+      "description": "List of network names specifying networks to which this policy is applied.",
+      "items": {
+        "properties": {
+          "networkRef": {
+            "description": "VPC network to bind to. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+            "properties": {
+              "external": {
+                "description": "A reference to an externally managed ComputeNetwork resource. Should be in the format \"projects/{{projectID}}/global/networks/{{networkID}}\".",
+                "type": "string"
+              },
+              "name": {
+                "description": "The name of a ComputeNetwork resource.",
+                "type": "string"
+              },
+              "namespace": {
+                "description": "The namespace of a ComputeNetwork resource.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "networkRef"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    }
+  },
+  "title": "GCP Dns DNSPolicy",
+  "type": "object"
+}

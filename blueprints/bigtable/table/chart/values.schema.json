@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Bigtable BigtableTable via Config Connector. Fields mirror the bigtable.cnrm.cloud.google.com/v1beta1 BigtableTable spec.",
+  "properties": {
+    "automatedBackupPolicy": {
+      "description": "If specified, automated backups are enabled for this table. Otherwise, automated backups are disabled.",
+      "properties": {
+        "frequency": {
+          "description": "How frequently automated backups should occur. The only supported value at this time is 24 hours. An undefined frequency is treated as 24 hours.",
+          "type": "string"
+        },
+        "locations": {
+          "description": "Optional. A list of Cloud Bigtable zones where automated backups are allowed to be created. If empty, automated backups will be created in all zones of the instance. Locations are in the format `projects/{project}/locations/{zone}`. This field can only set for tables in Enterprise Plus instances.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "retentionPeriod": {
+          "description": "Required. How long the automated backups should be retained. Values must be at least 3 days and at most 90 days.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "changeStreamRetention": {
+      "description": "Duration to retain change stream data for the table. Set to 0 to disable. Must be between 1 and 7 days..",
+      "type": "string"
+    },
+    "columnFamily": {
+      "description": "The names of the column families that should be created immediately upon table creation, specified by name. The values that may be set are specified here. At least one column family must be specified.",
+      "items": {
+        "properties": {
+          "family": {
+            "description": "The name of the column family.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "family"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "deletionProtection": {
+      "description": "NOTE: DeletionProtection proto field is changed from string (1.38) to bool (1.40) in cloud.google.com/go/bigtable/admin/apiv2/adminpb\nSet to true to make the table protected against data loss. i.e. deleting\nthe following resources through Admin APIs are prohibited:\n\n* The table.\n* The column families in the table.\n* The instance containing the table.\n\nNote one can still delete the data stored in the table through Data APIs.",
+      "type": "string"
+    },
+    "instanceRef": {
+      "description": "Immutable. The instance to create the table in. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed BigtableInstance resource.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a BigtableInstance resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a BigtableInstance resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "The BigtableTable name. If not given, the metadata.name will be used.",
+      "type": "string"
+    },
+    "splitKeys": {
+      "description": "A list of predefined keys to split the table on.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "instanceRef"
+  ],
+  "title": "GCP Bigtable BigtableTable",
+  "type": "object"
+}

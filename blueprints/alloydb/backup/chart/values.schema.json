@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Alloydb AlloyDBBackup via Config Connector. Fields mirror the alloydb.cnrm.cloud.google.com/v1beta1 AlloyDBBackup spec.",
+  "properties": {
+    "clusterNameRef": {
+      "description": "The full resource name of the backup source cluster (e.g., projects/{project}/locations/{location}/clusters/{clusterId}). Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed AlloyDBCluster resource. Should be in the format \"projects/{{projectID}}/locations/{{location}}/clusters/{{clusterID}}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of an AlloyDBCluster resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of an AlloyDBCluster resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "description": {
+      "description": "Immutable. User-provided description of the backup.",
+      "type": "string"
+    },
+    "encryptionConfig": {
+      "description": "EncryptionConfig describes the encryption config of a cluster or a backup that is encrypted with a CMEK (customer-managed encryption key).",
+      "properties": {
+        "kmsKeyName": {
+          "description": "Immutable. The fully-qualified resource name of the KMS key. Each Cloud KMS key is regionalized and has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME].",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "location": {
+      "description": "Immutable. The location where the alloydb backup should reside.",
+      "type": "string"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "projectRef": {
+      "description": "The project that this resource belongs to. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The `projectID` field of a project, when not managed by Config Connector.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The `name` field of a `Project` resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The `namespace` field of a `Project` resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The backupId of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "clusterNameRef",
+    "location",
+    "projectRef"
+  ],
+  "title": "GCP Alloydb AlloyDBBackup",
+  "type": "object"
+}

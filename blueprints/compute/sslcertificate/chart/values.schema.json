@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Compute ComputeSSLCertificate via Config Connector. Fields mirror the compute.cnrm.cloud.google.com/v1beta1 ComputeSSLCertificate spec.",
+  "properties": {
+    "certificate": {
+      "description": "Immutable. The certificate in PEM format. The certificate chain must be no greater than 5 certs long. The chain must include at least one intermediate cert. Set exactly one of `value` (a literal) or `valueFrom` (a reference to a Secret key).",
+      "properties": {
+        "value": {
+          "description": "Value of the field. Cannot be used if 'valueFrom' is specified.",
+          "type": "string"
+        },
+        "valueFrom": {
+          "description": "Source for the field's value. Cannot be used if 'value' is specified.",
+          "properties": {
+            "secretKeyRef": {
+              "description": "Reference to a value with the given key in the given Secret in the resource's namespace.",
+              "properties": {
+                "key": {
+                  "description": "Key that identifies the value to be extracted.",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "Name of the Secret to extract a value from.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "key",
+                "name"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "description": {
+      "description": "Immutable. An optional description of this resource.",
+      "type": "string"
+    },
+    "location": {
+      "description": "Location represents the geographical location of the ComputeSSLCertificate. Specify a region name or \"global\" for global resources. Reference: GCP definition of regions/zones (https://cloud.google.com/compute/docs/regions-zones/)",
+      "type": "string"
+    },
+    "privateKey": {
+      "description": "Immutable. The write-only private key in PEM format. Set exactly one of `value` (a literal) or `valueFrom` (a reference to a Secret key).",
+      "properties": {
+        "value": {
+          "description": "Value of the field. Cannot be used if 'valueFrom' is specified.",
+          "type": "string"
+        },
+        "valueFrom": {
+          "description": "Source for the field's value. Cannot be used if 'value' is specified.",
+          "properties": {
+            "secretKeyRef": {
+              "description": "Reference to a value with the given key in the given Secret in the resource's namespace.",
+              "properties": {
+                "key": {
+                  "description": "Key that identifies the value to be extracted.",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "Name of the Secret to extract a value from.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "key",
+                "name"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "certificate",
+    "location",
+    "privateKey"
+  ],
+  "title": "GCP Compute ComputeSSLCertificate",
+  "type": "object"
+}

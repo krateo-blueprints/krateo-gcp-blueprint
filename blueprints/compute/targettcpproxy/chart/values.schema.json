@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Compute ComputeTargetTCPProxy via Config Connector. Fields mirror the compute.cnrm.cloud.google.com/v1beta1 ComputeTargetTCPProxy spec.",
+  "properties": {
+    "backendServiceRef": {
+      "description": "A reference to the ComputeBackendService resource. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The value of an externally managed ComputeBackendService resource.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a ComputeBackendService resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a ComputeBackendService resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "description": {
+      "description": "Immutable. An optional description of this resource.",
+      "type": "string"
+    },
+    "location": {
+      "description": "The geographical location of the ComputeTargetTCPProxy. Reference: GCP definition of regions/zones (https://cloud.google.com/compute/docs/regions-zones/)",
+      "type": "string"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "proxyBind": {
+      "description": "Immutable. This field only applies when the forwarding rule that references this target proxy has a loadBalancingScheme set to INTERNAL_SELF_MANAGED.",
+      "type": "boolean"
+    },
+    "proxyHeader": {
+      "description": "Specifies the type of proxy header to append before sending data to the backend. Default value: \"NONE\" Possible values: [\"NONE\", \"PROXY_V1\"].",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "The ComputeTargetTCPProxy name. If not given, the metadata.name will be used.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "backendServiceRef"
+  ],
+  "title": "GCP Compute ComputeTargetTCPProxy",
+  "type": "object"
+}

@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Servicedirectory ServiceDirectoryEndpoint via Config Connector. Fields mirror the servicedirectory.cnrm.cloud.google.com/v1beta1 ServiceDirectoryEndpoint spec.",
+  "properties": {
+    "addressRef": {
+      "description": "Optional. The ComputeAddress resource whose IP address this endpoint uses. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed ComputeAddress resource. Should be in the format \"projects/{{projectID}}/global/addresses/{{addressID}}\" or \"projects/{{projectID}}/regions/{{region}}/addresses/{{addressID}}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a ComputeAddress resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a ComputeAddress resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "networkRef": {
+      "description": "Optional. The ComputeNetwork resource representing the GCE network of this endpoint. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed ComputeNetwork resource. Should be in the format \"projects/{{projectID}}/global/networks/{{networkID}}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a ComputeNetwork resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a ComputeNetwork resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "port": {
+      "description": "Optional. Port that the endpoint is running on, must be in the range of [0, 65535]. If unspecified, the default is 0.",
+      "format": "int32",
+      "type": "integer"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The endpointId of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    },
+    "serviceRef": {
+      "description": "Required. The ServiceDirectoryService that this endpoint belongs to. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed ServiceDirectoryService resource. Should be in the format \"projects/{{projectID}}/locations/{{location}}/namespaces/{{namespaceID}}/services/{{serviceID}}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a ServiceDirectoryService resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a ServiceDirectoryService resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "serviceRef"
+  ],
+  "title": "GCP Servicedirectory ServiceDirectoryEndpoint",
+  "type": "object"
+}

@@ -1,0 +1,187 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Compute ComputeReservation via Config Connector. Fields mirror the compute.cnrm.cloud.google.com/v1beta1 ComputeReservation spec.",
+  "properties": {
+    "description": {
+      "description": "Immutable. An optional description of this resource.",
+      "type": "string"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    },
+    "shareSettings": {
+      "description": "The share setting for reservations and sole tenancy node groups.",
+      "properties": {
+        "projectMap": {
+          "description": "A map of key(i.e. project or other shared resources) and associated project config. This is only valid when shareType's value is SPECIFIC_PROJECTS.",
+          "items": {
+            "properties": {
+              "keyRef": {
+                "description": "The resource reference that defaults to Project if Kind is not specified. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+                "properties": {
+                  "apiVersion": {
+                    "description": "APIVersion of the referenced resource",
+                    "type": "string"
+                  },
+                  "external": {
+                    "description": "The external name of the referenced resource",
+                    "type": "string"
+                  },
+                  "kind": {
+                    "description": "Kind of the referenced resource",
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "namespace": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "value": {
+                "properties": {
+                  "projectIDRef": {
+                    "description": "The project ID, should be same as the key of this project config in the parent map. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+                    "properties": {
+                      "external": {
+                        "description": "The `projectID` field of a project, when not managed by Config Connector.",
+                        "type": "string"
+                      },
+                      "kind": {
+                        "description": "The kind of the Project resource; optional but must be `Project` if provided.",
+                        "type": "string"
+                      },
+                      "name": {
+                        "description": "The `name` field of a `Project` resource.",
+                        "type": "string"
+                      },
+                      "namespace": {
+                        "description": "The `namespace` field of a `Project` resource.",
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "required": [
+              "keyRef"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "shareType": {
+          "description": "Immutable. Type of sharing for this shared-reservation Check the ShareType enum for the list of possible values.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "specificReservation": {
+      "description": "Reservation for instances with specific machine shapes.",
+      "properties": {
+        "count": {
+          "description": "The number of resources that are allocated.",
+          "format": "int64",
+          "type": "integer"
+        },
+        "inUseCount": {
+          "description": "Output only. Setting this field has no effect. How many instances are in use.",
+          "format": "int64",
+          "type": "integer"
+        },
+        "instanceProperties": {
+          "description": "Immutable. The instance properties for the reservation.",
+          "properties": {
+            "guestAccelerators": {
+              "description": "Immutable. Guest accelerator type and count.",
+              "items": {
+                "properties": {
+                  "acceleratorCount": {
+                    "description": "Immutable. The number of the guest accelerator cards exposed to this instance.",
+                    "format": "int32",
+                    "type": "integer"
+                  },
+                  "acceleratorType": {
+                    "description": "Immutable. The full or partial URL of the accelerator type to attach to this instance. For example: 'projects/my-project/zones/us-central1-c/acceleratorTypes/nvidia-tesla-p100' If you are creating an instance template, specify only the accelerator name.",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "acceleratorCount",
+                  "acceleratorType"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "localSsds": {
+              "description": "Immutable. The amount of local ssd to reserve with each instance. This reserves disks of type 'local-ssd'.",
+              "items": {
+                "properties": {
+                  "diskSizeGb": {
+                    "description": "Immutable. The size of the disk in base-2 GB.",
+                    "format": "int64",
+                    "type": "integer"
+                  },
+                  "interface": {
+                    "description": "Immutable. The disk interface to use for attaching this disk. Default value: \"SCSI\" Possible values: [\"SCSI\", \"NVME\"].",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "diskSizeGb"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "machineType": {
+              "description": "Immutable. The name of the machine type to reserve.",
+              "type": "string"
+            },
+            "minCpuPlatform": {
+              "description": "Immutable. The minimum CPU platform for the reservation. For example, '\"Intel Skylake\"'. See the CPU platform availability reference](https://cloud.google.com/compute/docs/instances/specify-min-cpu-platform#availablezones) for information on available CPU platforms.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "machineType"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "count",
+        "instanceProperties"
+      ],
+      "type": "object"
+    },
+    "specificReservationRequired": {
+      "description": "Immutable. When set to true, only VMs that target this reservation by name can consume this reservation. Otherwise, it can be consumed by VMs with affinity for any reservation. Defaults to false.",
+      "type": "boolean"
+    },
+    "zone": {
+      "description": "Immutable. The zone where the reservation is made.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "specificReservation",
+    "zone"
+  ],
+  "title": "GCP Compute ComputeReservation",
+  "type": "object"
+}

@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Iam IAMServiceAccountKey via Config Connector. Fields mirror the iam.cnrm.cloud.google.com/v1beta1 IAMServiceAccountKey spec.",
+  "properties": {
+    "keyAlgorithm": {
+      "description": "Immutable. The algorithm used to generate the key, used only on create. KEY_ALG_RSA_2048 is the default algorithm. Valid values are: \"KEY_ALG_RSA_1024\", \"KEY_ALG_RSA_2048\".",
+      "type": "string"
+    },
+    "privateKeyType": {
+      "description": "Immutable. The output format of the private key. TYPE_GOOGLE_CREDENTIALS_FILE is the default output format.",
+      "type": "string"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "publicKeyData": {
+      "description": "Immutable. A field that allows clients to upload their own public key. If set, use this public key data to create a service account key for given service account. Please note, the expected format for this field is a base64 encoded X509_PEM.",
+      "type": "string"
+    },
+    "publicKeyType": {
+      "description": "Immutable. The output format for the public key. TYPE_NONE is the default for public key output.",
+      "type": "string"
+    },
+    "serviceAccountRef": {
+      "description": "Immutable. The Service Account to create a key for. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The `email` field of an `IAMServiceAccount` resource.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "serviceAccountRef"
+  ],
+  "title": "GCP Iam IAMServiceAccountKey",
+  "type": "object"
+}

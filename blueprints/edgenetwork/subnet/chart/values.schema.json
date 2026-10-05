@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Edgenetwork EdgeNetworkSubnet via Config Connector. Fields mirror the edgenetwork.cnrm.cloud.google.com/v1beta1 EdgeNetworkSubnet spec.",
+  "properties": {
+    "description": {
+      "description": "Immutable. A free-text description of the resource. Max length 1024 characters.",
+      "type": "string"
+    },
+    "ipv4Cidr": {
+      "description": "Immutable. The ranges of ipv4 addresses that are owned by this subnetwork, in CIDR format.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "ipv6Cidr": {
+      "description": "Immutable. The ranges of ipv6 addresses that are owned by this subnetwork, in CIDR format.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "location": {
+      "description": "Immutable. The Google Cloud region to which the target Distributed Cloud Edge zone belongs.",
+      "type": "string"
+    },
+    "networkRef": {
+      "description": "Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "Allowed value: The `name` field of an `EdgeNetworkNetwork` resource.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "projectRef": {
+      "description": "The project that this resource belongs to. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "Allowed value: The `name` field of a `Project` resource.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The subnetId of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    },
+    "vlanId": {
+      "description": "Immutable. VLAN ID for this subnetwork. If not specified, one is assigned automatically.",
+      "type": "integer"
+    },
+    "zone": {
+      "description": "Immutable. The name of the target Distributed Cloud Edge zone.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "location",
+    "networkRef",
+    "projectRef",
+    "zone"
+  ],
+  "title": "GCP Edgenetwork EdgeNetworkSubnet",
+  "type": "object"
+}

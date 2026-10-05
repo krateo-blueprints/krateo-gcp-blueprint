@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Compute ComputeNetworkEndpointGroup via Config Connector. Fields mirror the compute.cnrm.cloud.google.com/v1beta1 ComputeNetworkEndpointGroup spec.",
+  "properties": {
+    "defaultPort": {
+      "description": "Immutable. The default port used if the port number is not specified in the network endpoint.",
+      "format": "int64",
+      "type": "integer"
+    },
+    "description": {
+      "description": "Immutable. An optional description of this resource. Provide this property when you create the resource.",
+      "type": "string"
+    },
+    "location": {
+      "description": "Location represents the geographical location of the ComputeNetworkEndpointGroup. Specify a zone name. Reference: GCP definition of regions/zones (https://cloud.google.com/compute/docs/regions-zones/)",
+      "type": "string"
+    },
+    "networkEndpointType": {
+      "description": "Immutable. Type of network endpoints in this network endpoint group.\nNON_GCP_PRIVATE_IP_PORT is used for hybrid connectivity network\nendpoint groups (see https://cloud.google.com/load-balancing/docs/hybrid).\nNote that NON_GCP_PRIVATE_IP_PORT can only be used with Backend Services\nthat 1) have the following load balancing schemes: EXTERNAL, EXTERNAL_MANAGED,\nINTERNAL_MANAGED, and INTERNAL_SELF_MANAGED and 2) support the RATE or\nCONNECTION balancing modes.\n\nPossible values include: GCE_VM_IP, GCE_VM_IP_PORT, and NON_GCP_PRIVATE_IP_PORT. Default value: \"GCE_VM_IP_PORT\" Possible values: [\"GCE_VM_IP\", \"GCE_VM_IP_PORT\", \"NON_GCP_PRIVATE_IP_PORT\"].",
+      "type": "string"
+    },
+    "networkRef": {
+      "description": "The network to which all network endpoints in the NEG belong. Uses \"default\" project network if unspecified. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed ComputeNetwork resource. Should be in the format \"projects/{{projectID}}/global/networks/{{networkID}}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a ComputeNetwork resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a ComputeNetwork resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    },
+    "subnetworkRef": {
+      "description": "Optional subnetwork to which all network endpoints in the NEG belong. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed ComputeSubnetwork resource. Should be in the format \"projects/{{projectID}}/regions/{{region}}/subnetworks/{{subnetworkID}}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a ComputeSubnetwork resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a ComputeSubnetwork resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "location",
+    "networkRef"
+  ],
+  "title": "GCP Compute ComputeNetworkEndpointGroup",
+  "type": "object"
+}

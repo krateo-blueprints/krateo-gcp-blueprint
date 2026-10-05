@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Compute ComputeNetworkPeering via Config Connector. Fields mirror the compute.cnrm.cloud.google.com/v1beta1 ComputeNetworkPeering spec.",
+  "properties": {
+    "exportCustomRoutes": {
+      "description": "Whether to export the custom routes to the peer network. Defaults to false.",
+      "type": "boolean"
+    },
+    "exportSubnetRoutesWithPublicIp": {
+      "description": "Immutable.",
+      "type": "boolean"
+    },
+    "importCustomRoutes": {
+      "description": "Whether to export the custom routes from the peer network. Defaults to false.",
+      "type": "boolean"
+    },
+    "importSubnetRoutesWithPublicIp": {
+      "description": "Immutable.",
+      "type": "boolean"
+    },
+    "networkRef": {
+      "description": "ComputeNetworkRef is a reference to a GCP ComputeNetwork. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed ComputeNetwork resource. Should be in the format \"projects/{{projectID}}/global/networks/{{networkID}}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a ComputeNetwork resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a ComputeNetwork resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "peerNetworkRef": {
+      "description": "ComputeNetworkRef is a reference to a GCP ComputeNetwork. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed ComputeNetwork resource. Should be in the format \"projects/{{projectID}}/global/networks/{{networkID}}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a ComputeNetwork resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a ComputeNetwork resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    },
+    "stackType": {
+      "description": "Which IP version(s) of traffic and routes are allowed to be imported or exported between peer networks. The default value is IPV4_ONLY. Possible values: [\"IPV4_ONLY\", \"IPV4_IPV6\"].",
+      "type": "string"
+    }
+  },
+  "required": [
+    "networkRef",
+    "peerNetworkRef"
+  ],
+  "title": "GCP Compute ComputeNetworkPeering",
+  "type": "object"
+}

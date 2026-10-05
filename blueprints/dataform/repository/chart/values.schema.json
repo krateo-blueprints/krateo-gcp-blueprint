@@ -1,0 +1,178 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Dataform DataformRepository via Config Connector. Fields mirror the dataform.cnrm.cloud.google.com/v1beta1 DataformRepository spec.",
+  "properties": {
+    "displayName": {
+      "description": "Optional. The repository's user-friendly name.",
+      "type": "string"
+    },
+    "gitRemoteSettings": {
+      "description": "Optional. If set, configures this repository to be linked to a Git remote.",
+      "properties": {
+        "authenticationTokenSecretVersionRef": {
+          "description": "The name of the Secret Manager secret version to use as an authentication token for Git operations. Must be in the format projects/* /secrets/* /versions/*. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+          "properties": {
+            "external": {
+              "description": " If provided must be in the format `projects/*/secrets/*/versions/*`.",
+              "type": "string"
+            },
+            "name": {
+              "description": "The `name` field of a `SecretManagerSecretVersion` resource.",
+              "type": "string"
+            },
+            "namespace": {
+              "description": "The `metadata.namespace` field of a `SecretManagerSecretVersion` resource.",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "defaultBranch": {
+          "description": "The Git remote's default branch name.",
+          "type": "string"
+        },
+        "sshAuthenticationConfig": {
+          "description": "Authentication fields for remote uris using SSH protocol.",
+          "properties": {
+            "hostPublicKey": {
+              "description": "Content of a public SSH key to verify an identity of a remote Git host.",
+              "type": "string"
+            },
+            "userPrivateKeySecretVersionRef": {
+              "description": "The name of the Secret Manager secret version to use as a ssh private key for Git operations. Must be in the format projects/*/secrets/*/versions/* . Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+              "properties": {
+                "external": {
+                  "description": " If provided must be in the format `projects/*/secrets/*/versions/*`.",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "The `name` field of a `SecretManagerSecretVersion` resource.",
+                  "type": "string"
+                },
+                "namespace": {
+                  "description": "The `metadata.namespace` field of a `SecretManagerSecretVersion` resource.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "required": [
+            "hostPublicKey",
+            "userPrivateKeySecretVersionRef"
+          ],
+          "type": "object"
+        },
+        "url": {
+          "description": "The Git remote's URL.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "defaultBranch",
+        "url"
+      ],
+      "type": "object"
+    },
+    "npmrcEnvironmentVariablesSecretVersionRef": {
+      "description": "Optional. The name of the Secret Manager secret version to be used to interpolate variables into the .npmrc file for package installation operations. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": " If provided must be in the format `projects/*/secrets/*/versions/*`.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The `name` field of a `SecretManagerSecretVersion` resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The `metadata.namespace` field of a `SecretManagerSecretVersion` resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "projectRef": {
+      "description": "The project that this resource belongs to. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The `projectID` field of a project, when not managed by Config Connector.",
+          "type": "string"
+        },
+        "kind": {
+          "description": "The kind of the Project resource; optional but must be `Project` if provided.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The `name` field of a `Project` resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The `namespace` field of a `Project` resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "region": {
+      "description": "Immutable. A reference to the region.",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    },
+    "serviceAccountRef": {
+      "description": "Optional. The service account reference to run workflow invocations under. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The `email` field of an `IAMServiceAccount` resource.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "setAuthenticatedUserAdmin": {
+      "description": "Optional. Input only. If set to true, the authenticated user will be granted the roles/dataform.admin role on the created repository.",
+      "type": "boolean"
+    },
+    "workspaceCompilationOverrides": {
+      "description": "Optional. If set, fields of workspaceCompilationOverrides override the default compilation settings that are specified in dataform.json when creating workspace-scoped compilation results.",
+      "properties": {
+        "defaultDatabase": {
+          "description": "Optional. The default database (Google Cloud project ID).",
+          "type": "string"
+        },
+        "schemaSuffix": {
+          "description": "Optional. The suffix that should be appended to all schema (BigQuery dataset ID) names.",
+          "type": "string"
+        },
+        "tablePrefix": {
+          "description": "Optional. The prefix that should be prepended to all table names.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "projectRef",
+    "region"
+  ],
+  "title": "GCP Dataform DataformRepository",
+  "type": "object"
+}

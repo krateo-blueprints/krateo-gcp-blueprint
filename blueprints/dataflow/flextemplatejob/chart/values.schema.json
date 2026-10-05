@@ -1,0 +1,154 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Dataflow DataflowFlexTemplateJob via Config Connector. Fields mirror the dataflow.cnrm.cloud.google.com/v1beta1 DataflowFlexTemplateJob spec.",
+  "properties": {
+    "additionalExperiments": {
+      "description": "Additional experiment flags for the job.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "autoscalingAlgorithm": {
+      "description": "The algorithm to use for autoscaling",
+      "type": "string"
+    },
+    "containerSpecGcsPath": {
+      "description": "Cloud Storage path to a file with json serialized ContainerSpec as content.",
+      "type": "string"
+    },
+    "enableStreamingEngine": {
+      "description": "Whether to enable Streaming Engine for the job.",
+      "type": "boolean"
+    },
+    "ipConfiguration": {
+      "description": "Configuration for VM IPs.",
+      "type": "string"
+    },
+    "kmsKeyNameRef": {
+      "description": "The Cloud KMS key for the job. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed KMSCryptoKey. Should be in the format `projects/[kms_project_id]/locations/[region]/keyRings/[key_ring_id]/cryptoKeys/[key]`.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The `name` of a `KMSCryptoKey` resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The `namespace` of a `KMSCryptoKey` resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "launcherMachineType": {
+      "description": "The machine type to use for launching the job. The default is n1-standard-1.",
+      "type": "string"
+    },
+    "machineType": {
+      "description": "The machine type to use for the job. Defaults to the value from the template if not specified.",
+      "type": "string"
+    },
+    "maxWorkers": {
+      "description": "The maximum number of Google Compute Engine instances to be made available to your pipeline during execution, from 1 to 1000.",
+      "format": "int32",
+      "type": "integer"
+    },
+    "networkRef": {
+      "description": "Network to which VMs will be assigned.  If empty or unspecified, the service will use the network \"default\". Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed ComputeNetwork resource. Should be in the format \"projects/{{projectID}}/global/networks/{{networkID}}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a ComputeNetwork resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a ComputeNetwork resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "numWorkers": {
+      "description": "The initial number of Google Compute Engine instances for the job.",
+      "format": "int32",
+      "type": "integer"
+    },
+    "parameters": {
+      "description": "The parameters for FlexTemplate. Ex. {\"num_workers\":\"5\"}",
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "region": {
+      "description": "Immutable. The region in which the created job should run.",
+      "type": "string"
+    },
+    "sdkContainerImage": {
+      "description": "Docker registry location of container image to use for the 'worker harness. Default is the container for the version of the SDK. Note this field is only valid for portable pipelines.",
+      "type": "string"
+    },
+    "serviceAccountEmailRef": {
+      "description": "The email address of the service account to run the job as. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The `email` field of an `IAMServiceAccount` resource.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "stagingLocation": {
+      "description": "The Cloud Storage path for staging local files. Must be a valid Cloud Storage URL, beginning with `gs://`.",
+      "type": "string"
+    },
+    "subnetworkRef": {
+      "description": "Subnetwork to which VMs will be assigned, if desired. You can specify a subnetwork using either a complete URL or an abbreviated path. Expected to be of the form \"https://www.googleapis.com/compute/v1/projects/HOST_PROJECT_ID/regions/REGION/subnetworks/SUBNETWORK\" or \"regions/REGION/subnetworks/SUBNETWORK\". If the subnetwork is located in a Shared VPC network, you must use the complete URL. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed ComputeSubnetwork resource. Should be in the format \"projects/{{projectID}}/regions/{{region}}/subnetworks/{{subnetworkID}}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a ComputeSubnetwork resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a ComputeSubnetwork resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "tempLocation": {
+      "description": "The Cloud Storage path to use for temporary files. Must be a valid Cloud Storage URL, beginning with `gs://`.",
+      "type": "string"
+    },
+    "transformNameMapping": {
+      "description": "Map of transform name prefixes of the job to be replaced with the corresponding name prefixes of the new job. Only applicable when updating a pipeline.",
+      "type": "object"
+    }
+  },
+  "required": [
+    "containerSpecGcsPath"
+  ],
+  "title": "GCP Dataflow DataflowFlexTemplateJob",
+  "type": "object"
+}

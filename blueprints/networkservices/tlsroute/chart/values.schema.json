@@ -1,0 +1,171 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Networkservices NetworkServicesTLSRoute via Config Connector. Fields mirror the networkservices.cnrm.cloud.google.com/v1beta1 NetworkServicesTLSRoute spec.",
+  "properties": {
+    "description": {
+      "description": "Optional. A free-text description of the resource. Max length 1024 characters.",
+      "type": "string"
+    },
+    "gateways": {
+      "items": {
+        "description": "Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+        "properties": {
+          "external": {
+            "description": "Allowed value: The `selfLink` field of a `NetworkServicesGateway` resource.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+            "type": "string"
+          },
+          "namespace": {
+            "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "location": {
+      "description": "Immutable. The location for the resource",
+      "type": "string"
+    },
+    "meshes": {
+      "items": {
+        "description": "Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+        "properties": {
+          "external": {
+            "description": "Allowed value: The `selfLink` field of a `NetworkServicesMesh` resource.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+            "type": "string"
+          },
+          "namespace": {
+            "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "projectRef": {
+      "description": "Immutable. The Project that this resource belongs to. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The project for the resource\n\nAllowed value: The Google Cloud resource name of a `Project` resource (format: `projects/{{name}}`).",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    },
+    "rules": {
+      "description": "Required. Rules that define how traffic is routed and handled. At least one RouteRule must be supplied. If there are multiple rules then the action taken will be the first rule to match.",
+      "items": {
+        "properties": {
+          "action": {
+            "description": "Required. The detailed rule defining how to route matched traffic.",
+            "properties": {
+              "destinations": {
+                "description": "Required. The destination services to which traffic should be forwarded. At least one destination service is required.",
+                "items": {
+                  "properties": {
+                    "serviceRef": {
+                      "description": "Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+                      "properties": {
+                        "external": {
+                          "description": "Required. The URL of a BackendService to route traffic to.\n\nAllowed value: The Google Cloud resource name of a `ComputeBackendService` resource (format: `projects/{{project}}/global/backendServices/{{name}}`).",
+                          "type": "string"
+                        },
+                        "name": {
+                          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+                          "type": "string"
+                        },
+                        "namespace": {
+                          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "weight": {
+                      "description": "Optional. Specifies the proportion of requests forwareded to the backend referenced by the service_name field. This is computed as: weight/Sum(weights in destinations) Weights in all destinations does not need to sum up to 100.",
+                      "format": "int64",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "serviceRef"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "destinations"
+            ],
+            "type": "object"
+          },
+          "matches": {
+            "description": "Required. RouteMatch defines the predicate used to match requests to a given action. Multiple match types are \"OR\"ed for evaluation.",
+            "items": {
+              "properties": {
+                "alpn": {
+                  "description": "Optional. ALPN (Application-Layer Protocol Negotiation) to match against. Examples: \"http/1.1\", \"h2\". At least one of sni_host and alpn is required. Up to 5 alpns across all matches can be set.",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "sniHost": {
+                  "description": "Optional. SNI (server name indicator) to match against. SNI will be matched against all wildcard domains, i.e. www.example.com will be first matched against www.example.com, then *.example.com, then *.com. Partial wildcards are not supported, and values like *w.example.com are invalid. At least one of sni_host and alpn is required. Up to 5 sni hosts across all matches can be set.",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "action",
+          "matches"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "location",
+    "projectRef",
+    "rules"
+  ],
+  "title": "GCP Networkservices NetworkServicesTLSRoute",
+  "type": "object"
+}

@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Compute ComputeTargetSSLProxy via Config Connector. Fields mirror the compute.cnrm.cloud.google.com/v1beta1 ComputeTargetSSLProxy spec.",
+  "properties": {
+    "backendServiceRef": {
+      "description": "A reference to the ComputeBackendService resource. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The value of an externally managed ComputeBackendService resource.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a ComputeBackendService resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a ComputeBackendService resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "certificateMapRef": {
+      "description": "A reference to the CertificateMap resource uri that identifies a certificate map associated with the given target proxy. This field can only be set for global target proxies. Accepted format is '//certificatemanager.googleapis.com/projects/{project}/locations/{location}/certificateMaps/{resourceName}'. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed CertificateManagerCertificateMap resource. Should be in the format \"projects/{{projectID}}/locations/global/certificateMaps/{{certificateMapID}}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a CertificateManagerCertificateMap resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a CertificateManagerCertificateMap resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "description": {
+      "description": "Immutable. An optional description of this resource.",
+      "type": "string"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "proxyHeader": {
+      "description": "Specifies the type of proxy header to append before sending data to the backend. Default value: \"NONE\" Possible values: [\"NONE\", \"PROXY_V1\"].",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    },
+    "sslCertificates": {
+      "items": {
+        "description": "A reference to a ComputeSSLCertificate resource. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+        "properties": {
+          "external": {
+            "description": "Allowed value: string of the format `projects/{{project}}/global/sslCertificates/{{value}}` or `projects/{{project}}/regions/{{region}}/sslCertificates/{{value}}`, where {{value}} is the `name` field of a `ComputeSSLCertificate` resource.",
+            "type": "string"
+          },
+          "name": {
+            "description": "The name of a ComputeSSLCertificate resource.",
+            "type": "string"
+          },
+          "namespace": {
+            "description": "The namespace of a ComputeSSLCertificate resource.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "sslPolicyRef": {
+      "description": "A reference to the ComputeSSLPolicy resource that will be associated with the TargetSslProxy resource. If not set, the ComputeTargetSSLProxy resource will not have any SSL policy configured. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed ComputeSSLPolicy resource. Should be in the format \"projects/{{projectID}}/global/sslPolicies/{{sslPolicyID}}\" or \"projects/{{projectID}}/regions/{{region}}/sslPolicies/{{sslPolicyID}}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a ComputeSSLPolicy resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a ComputeSSLPolicy resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "backendServiceRef"
+  ],
+  "title": "GCP Compute ComputeTargetSSLProxy",
+  "type": "object"
+}

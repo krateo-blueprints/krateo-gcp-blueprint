@@ -1,0 +1,122 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Networksecurity NetworkSecurityClientTLSPolicy via Config Connector. Fields mirror the networksecurity.cnrm.cloud.google.com/v1beta1 NetworkSecurityClientTLSPolicy spec.",
+  "properties": {
+    "clientCertificate": {
+      "description": "Optional. Defines a mechanism to provision client identity (public and private keys) for peer to peer authentication. The presence of this dictates mTLS.",
+      "properties": {
+        "certificateProviderInstance": {
+          "description": "Optional. The certificate provider instance specification that will be passed to the data plane, which will be used to load necessary credential information.",
+          "properties": {
+            "pluginInstance": {
+              "description": "Required. Plugin instance name, used to locate and load CertificateProvider instance configuration. Set to \"google_cloud_private_spiffe\" to use Certificate Authority Service certificate provider instance.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "pluginInstance"
+          ],
+          "type": "object"
+        },
+        "grpcEndpoint": {
+          "description": "Optional. gRPC specific configuration to access the gRPC server to obtain the cert and private key.",
+          "properties": {
+            "targetUri": {
+              "description": "Required. The target URI of the gRPC endpoint. Only UDS path is supported, and should start with \"unix:\".",
+              "type": "string"
+            }
+          },
+          "required": [
+            "targetUri"
+          ],
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "description": {
+      "description": "Optional. Free-text description of the resource.",
+      "type": "string"
+    },
+    "location": {
+      "description": "The location of this resource.",
+      "type": "string"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "projectRef": {
+      "description": "The project that this resource belongs to. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The `projectID` field of a project, when not managed by Config Connector.",
+          "type": "string"
+        },
+        "kind": {
+          "description": "The kind of the Project resource; optional but must be `Project` if provided.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The `name` field of a `Project` resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The `namespace` field of a `Project` resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "resourceID": {
+      "description": "The NetworkSecurityClientTLSPolicy name. If not given, the metadata.name will be used.",
+      "type": "string"
+    },
+    "serverValidationCa": {
+      "description": "Optional. Defines the mechanism to obtain the Certificate Authority certificate to validate the server certificate. If empty, client does not validate the server certificate.",
+      "items": {
+        "properties": {
+          "certificateProviderInstance": {
+            "description": "Optional. The certificate provider instance specification that will be passed to the data plane, which will be used to load necessary credential information.",
+            "properties": {
+              "pluginInstance": {
+                "description": "Required. Plugin instance name, used to locate and load CertificateProvider instance configuration. Set to \"google_cloud_private_spiffe\" to use Certificate Authority Service certificate provider instance.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "pluginInstance"
+            ],
+            "type": "object"
+          },
+          "grpcEndpoint": {
+            "description": "Optional. gRPC specific configuration to access the gRPC server to obtain the CA certificate.",
+            "properties": {
+              "targetUri": {
+                "description": "Required. The target URI of the gRPC endpoint. Only UDS path is supported, and should start with \"unix:\".",
+                "type": "string"
+              }
+            },
+            "required": [
+              "targetUri"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "sni": {
+      "description": "Optional. Server Name Indication string to present to the server during TLS handshake. E.g: \"secure.example.com\".",
+      "type": "string"
+    }
+  },
+  "required": [
+    "location"
+  ],
+  "title": "GCP Networksecurity NetworkSecurityClientTLSPolicy",
+  "type": "object"
+}

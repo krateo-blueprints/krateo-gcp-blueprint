@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Servicedirectory ServiceDirectoryNamespace via Config Connector. Fields mirror the servicedirectory.cnrm.cloud.google.com/v1beta1 ServiceDirectoryNamespace spec.",
+  "properties": {
+    "location": {
+      "description": "Immutable. The location for the Namespace. A full list of valid locations can be found by running 'gcloud beta service-directory locations list'.",
+      "type": "string"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "projectRef": {
+      "description": "The project that this resource belongs to. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The `projectID` field of a project, when not managed by Config Connector.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The `name` field of a `Project` resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The `namespace` field of a `Project` resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The namespaceId of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "location",
+    "projectRef"
+  ],
+  "title": "GCP Servicedirectory ServiceDirectoryNamespace",
+  "type": "object"
+}

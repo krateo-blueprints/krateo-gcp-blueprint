@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Accesscontextmanager AccessContextManagerServicePerimeterResource via Config Connector. Fields mirror the accesscontextmanager.cnrm.cloud.google.com/v1alpha1 AccessContextManagerServicePerimeterResource spec.",
+  "properties": {
+    "perimeterNameRef": {
+      "description": "Only the `external` field is supported to configure the reference.\n\nThe name of the Service Perimeter to add this resource to. \nReferencing a resource name leads to recursive reference and Config Connector does not support the feature for now. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "Allowed value: The `name` field of an `AccessContextManagerServicePerimeter` resource.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceRef": {
+      "description": "A GCP resource that is inside of the service perimeter. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "Allowed value: string of the format `projects/{{value}}`, where {{value}} is the `number` field of a `Project` resource.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "perimeterNameRef",
+    "resourceRef"
+  ],
+  "title": "GCP Accesscontextmanager AccessContextManagerServicePerimeterResource",
+  "type": "object"
+}

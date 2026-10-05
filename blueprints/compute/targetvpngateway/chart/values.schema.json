@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Compute ComputeTargetVPNGateway via Config Connector. Fields mirror the compute.cnrm.cloud.google.com/v1beta1 ComputeTargetVPNGateway spec.",
+  "properties": {
+    "description": {
+      "description": "Immutable. An optional description of this resource.",
+      "type": "string"
+    },
+    "networkRef": {
+      "description": "The network this VPN gateway is accepting traffic for. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed ComputeNetwork resource. Should be in the format \"projects/{{projectID}}/global/networks/{{networkID}}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a ComputeNetwork resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a ComputeNetwork resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "region": {
+      "description": "Immutable. The region this gateway should sit in.",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "networkRef",
+    "region"
+  ],
+  "title": "GCP Compute ComputeTargetVPNGateway",
+  "type": "object"
+}

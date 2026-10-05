@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Bigtable BigtableAppProfile via Config Connector. Fields mirror the bigtable.cnrm.cloud.google.com/v1beta1 BigtableAppProfile spec.",
+  "properties": {
+    "dataBoostIsolationReadOnly": {
+      "description": "Specifies that this app profile is intended for read-only usage via the Data Boost feature. Please opt-in to this feature by setting the `alpha.cnrm.cloud.google.com/reconciler: direct` annotation.",
+      "properties": {
+        "computeBillingOwner": {
+          "description": "The Compute Billing Owner for this Data Boost App Profile.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "description": {
+      "description": "Long form description of the use case for this AppProfile.",
+      "type": "string"
+    },
+    "instanceRef": {
+      "description": "InstanceRef is a reference to a BigtableInstance. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed BigtableInstance resource.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a BigtableInstance resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a BigtableInstance resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "multiClusterRoutingClusterIds": {
+      "description": "The set of clusters to route to, if using multi cluster routing. The order is ignored; clusters will be tried in order of distance. If left empty, all clusters are eligible.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "multiClusterRoutingUseAny": {
+      "description": "Use a multi-cluster routing policy.",
+      "type": "boolean"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "The BigtableAppProfile name. If not given, the metadata.name will be used.",
+      "type": "string"
+    },
+    "singleClusterRouting": {
+      "description": "Use a single-cluster routing policy.",
+      "properties": {
+        "allowTransactionalWrites": {
+          "description": "Whether or not `CheckAndMutateRow` and `ReadModifyWriteRow` requests are allowed by this app profile. It is unsafe to send these requests to the same table/row/column in multiple clusters.",
+          "type": "boolean"
+        },
+        "clusterId": {
+          "description": "The cluster to which read/write requests should be routed.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "standardIsolation": {
+      "description": "The standard options used for isolating this app profile's traffic from other use cases.",
+      "properties": {
+        "priority": {
+          "description": "The priority of requests sent using this app profile.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "instanceRef"
+  ],
+  "title": "GCP Bigtable BigtableAppProfile",
+  "type": "object"
+}

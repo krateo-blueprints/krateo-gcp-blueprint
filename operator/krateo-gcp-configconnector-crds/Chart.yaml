@@ -1,0 +1,17 @@
+apiVersion: v2
+# The two cluster-scoped CRDs the Config Connector operator defines: ConfigConnector and
+# ConfigConnectorContext. Repackaged verbatim from the upstream operator release bundle.
+#
+# Shipped as a DEDICATED -crds composition so the CRDs land before anything that creates a
+# ConfigConnector CR. The ~635 Google resource CRDs are NOT here: the operator installs those
+# itself at runtime, once a ConfigConnector CR is applied.
+name: krateo-gcp-configconnector-crds
+description: CRDs for Google Config Connector — ConfigConnector and ConfigConnectorContext.
+type: application
+version: CHART_VERSION
+appVersion: "1.99.0"
+home: https://krateo.io
+sources:
+  - https://github.com/krateo-blueprints/krateo-gcp-blueprint
+annotations:
+  krateoSupportedVersion: "2.7.0"

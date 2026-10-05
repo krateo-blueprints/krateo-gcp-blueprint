@@ -1,0 +1,90 @@
+apiVersion: v1
+data:
+  drawer: "true"
+  form: "true"
+  showFormStructure: "true"
+  drawerSize: large
+kind: ConfigMap
+metadata:
+  name: template-gcp-networksecurity-authorizationpolicy-card
+  namespace: gcp-networksecurity-system
+---
+apiVersion: templates.krateo.io/v1alpha1
+kind: Widget
+metadata:
+  name: template-gcp-networksecurity-authorizationpolicy-card
+  namespace: gcp-networksecurity-system
+spec:
+  actions:
+  - template:
+      apiVersion: templates.krateo.io/v1alpha1
+      name: template-gcp-networksecurity-authorizationpolicy-customform
+      namespace: gcp-networksecurity-system
+      resource: customforms
+      verb: GET
+  - template:
+      apiVersion: core.krateo.io/v1alpha1
+      name: gcp-networksecurity-authorizationpolicy
+      namespace: gcp-networksecurity-system
+      resource: compositiondefinitions
+      verb: DELETE
+  app:
+    template:
+      color: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | if .status == "False" then "orange" elif .status == "True" then "green" else "grey" end }
+      content: Provision a Google Cloud Networksecurity NetworkSecurityAuthorizationPolicy via Config Connector.
+      icon: fa-brands fa-google
+      tags: gcp-networksecurity-system,0.1.0
+      title: gcp-networksecurity-authorizationpolicy
+      status: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | "Ready:" + .status }
+      date: ${ .getCompositionDefinition.metadata.creationTimestamp }
+  propsRef:
+    name: template-gcp-networksecurity-authorizationpolicy-card
+    namespace: gcp-networksecurity-system
+  type: card
+  api:
+  - name: getCompositionDefinition
+    path: "/apis/core.krateo.io/v1alpha1/namespaces/gcp-networksecurity-system/compositiondefinitions/gcp-networksecurity-authorizationpolicy"
+    verb: GET
+    headers:
+    - 'Accept: application/json'
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: template-gcp-networksecurity-authorizationpolicy-customform
+  namespace: gcp-networksecurity-system
+data:
+  onSubmitId: submit
+  onSubmitVerb: POST
+  payloadFormKey: spec
+  redirectRoute: /compositions/${metadata.namespace}/${metadata.name}
+  redirectTimeout: "50"
+---
+apiVersion: templates.krateo.io/v1alpha1
+kind: CustomForm
+metadata:
+  name: template-gcp-networksecurity-authorizationpolicy-customform
+  namespace: gcp-networksecurity-system
+spec:
+  type: customform
+  propsRef:
+    name: template-gcp-networksecurity-authorizationpolicy-customform
+    namespace: gcp-networksecurity-system
+  actions:
+    - template:
+        id: submit
+        apiVersion: composition.krateo.io/v0-1-0
+        verb: POST
+        resource: gcpnetworksecurityauthorizationpolicies
+        payloadToOverride:
+        - name: metadata.namespace
+          value: ${ "gcp-networksecurity-system" }
+  app:
+    template:
+      schema: ${ .getCRD | .spec.versions[] | select(.name == "v0-1-0") | .schema.openAPIV3Schema.properties.spec }
+  api:
+  - name: getCRD
+    path: "/apis/apiextensions.k8s.io/v1/customresourcedefinitions/gcpnetworksecurityauthorizationpolicies.composition.krateo.io"
+    verb: GET
+    headers:
+    - 'Accept: application/json'

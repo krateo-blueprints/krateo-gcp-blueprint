@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Compute ComputeFirewallPolicyAssociation via Config Connector. Fields mirror the compute.cnrm.cloud.google.com/v1beta1 ComputeFirewallPolicyAssociation spec.",
+  "properties": {
+    "attachmentTargetRef": {
+      "description": "Immutable. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The target that the firewall policy is attached to.\n\nAllowed values:\n* The Google Cloud resource name of a `Folder` resource (format: `folders/{{name}}`).\n* The Google Cloud resource name of a Google Cloud Organization (format: `organizations/{{name}}`).",
+          "type": "string"
+        },
+        "kind": {
+          "description": "Kind of the referent. Allowed values: Folder",
+          "type": "string"
+        },
+        "name": {
+          "description": "[WARNING] Organization not yet supported in Config Connector, use 'external' field to reference existing resources. Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "firewallPolicyRef": {
+      "description": "Immutable. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed ComputeFirewallPolicy resource. Should be in the format \"locations/global/firewallPolicies/{{firewallPolicyID}}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a ComputeFirewallPolicy resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a ComputeFirewallPolicy resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "attachmentTargetRef",
+    "firewallPolicyRef"
+  ],
+  "title": "GCP Compute ComputeFirewallPolicyAssociation",
+  "type": "object"
+}

@@ -1,0 +1,39 @@
+{{- /*
+The cluster-scoped ConfigConnector singleton. Its name is fixed by the operator -- it only ever
+reconciles one named `configconnector.core.cnrm.cloud.google.com`.
+
+credentialSecretName and googleServiceAccount are mutually exclusive upstream ("This field cannot
+be specified together with..."), and namespaced mode accepts NEITHER here: it takes its identity
+from a per-namespace ConfigConnectorContext instead. The guards below fail the render rather than
+let the operator reject the object later, where the error is far less visible.
+*/ -}}
+{{- if .Values.configConnector.enabled }}
+{{- $cc := .Values.configConnector }}
+{{- if eq $cc.mode "cluster" }}
+  {{- if and $cc.credentialSecretName $cc.googleServiceAccount }}
+    {{- fail "configConnector: set only ONE of credentialSecretName or googleServiceAccount in cluster mode, not both" }}
+  {{- end }}
+  {{- if not (or $cc.credentialSecretName $cc.googleServiceAccount) }}
+    {{- fail "configConnector: cluster mode requires either credentialSecretName (service-account key) or googleServiceAccount (Workload Identity)" }}
+  {{- end }}
+{{- else if eq $cc.mode "namespaced" }}
+  {{- if or $cc.credentialSecretName $cc.googleServiceAccount }}
+    {{- fail "configConnector: namespaced mode takes its identity from a per-namespace ConfigConnectorContext; leave credentialSecretName and googleServiceAccount empty" }}
+  {{- end }}
+{{- end }}
+apiVersion: core.cnrm.cloud.google.com/v1beta1
+kind: ConfigConnector
+metadata:
+  name: configconnector.core.cnrm.cloud.google.com
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/part-of: krateo-gcp-blueprint
+spec:
+  mode: {{ $cc.mode | quote }}
+  {{- with $cc.credentialSecretName }}
+  credentialSecretName: {{ . | quote }}
+  {{- end }}
+  {{- with $cc.googleServiceAccount }}
+  googleServiceAccount: {{ . | quote }}
+  {{- end }}
+{{- end }}

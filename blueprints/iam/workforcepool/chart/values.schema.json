@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Iam IAMWorkforcePool via Config Connector. Fields mirror the iam.cnrm.cloud.google.com/v1beta1 IAMWorkforcePool spec.",
+  "properties": {
+    "description": {
+      "description": "A user-specified description of the pool. Cannot exceed 256 characters.",
+      "type": "string"
+    },
+    "disabled": {
+      "description": "Whether the pool is disabled. You cannot use a disabled pool to exchange tokens, or use existing tokens to access resources. If the pool is re-enabled, existing tokens grant access again.",
+      "type": "boolean"
+    },
+    "displayName": {
+      "description": "A user-specified display name of the pool in Google Cloud Console. Cannot exceed 32 characters.",
+      "type": "string"
+    },
+    "location": {
+      "description": "Immutable. The location for the resource",
+      "type": "string"
+    },
+    "organizationRef": {
+      "description": "Immutable. The Organization that this resource belongs to. Only one of [organizationRef] may be specified. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "Allowed value: The Google Cloud resource name of a Google Cloud Organization (format: `organizations/{{name}}`).",
+          "type": "string"
+        },
+        "name": {
+          "description": "[WARNING] Organization not yet supported in Config Connector, use 'external' field to reference existing resources.\nName of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    },
+    "sessionDuration": {
+      "description": "How long the Google Cloud access tokens, console sign-in sessions, and gcloud sign-in sessions from this pool are valid. Must be greater than 15 minutes (900s) and less than 12 hours (43200s). If `session_duration` is not configured, minted credentials will have a default duration of one hour (3600s).",
+      "type": "string"
+    }
+  },
+  "required": [
+    "location",
+    "organizationRef"
+  ],
+  "title": "GCP Iam IAMWorkforcePool",
+  "type": "object"
+}

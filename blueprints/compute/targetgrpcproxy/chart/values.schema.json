@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Compute ComputeTargetGRPCProxy via Config Connector. Fields mirror the compute.cnrm.cloud.google.com/v1beta1 ComputeTargetGRPCProxy spec.",
+  "properties": {
+    "description": {
+      "description": "Immutable. An optional description of this resource.",
+      "type": "string"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "The ComputeTargetGRPCProxy name. If not given, the metadata.name will be used.",
+      "type": "string"
+    },
+    "urlMapRef": {
+      "description": "The UrlMap resource that defines the mapping from URL to the BackendService. The protocol field in the BackendService must be set to GRPC. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed ComputeURLMap resource. Should be in the format \"projects/{{projectID}}/global/urlMaps/{{urlMapID}}\" or \"projects/{{projectID}}/regions/{{region}}/urlMaps/{{urlMapID}}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a ComputeURLMap resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a ComputeURLMap resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "validateForProxyless": {
+      "description": "Immutable. If true, indicates that the BackendServices referenced by the urlMap may be accessed by gRPC applications without using a sidecar proxy. This will enable configuration checks on urlMap and its referenced BackendServices to not allow unsupported features. A gRPC application must use \"xds:///\" scheme in the target URI of the service it is connecting to. If false, indicates that the BackendServices referenced by the urlMap will be accessed by gRPC applications via a sidecar proxy. In this case, a gRPC application must not use \"xds:///\" scheme in the target URI of the service it is connecting to.",
+      "type": "boolean"
+    }
+  },
+  "title": "GCP Compute ComputeTargetGRPCProxy",
+  "type": "object"
+}

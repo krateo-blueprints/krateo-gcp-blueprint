@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Tags TagsTagBinding via Config Connector. Fields mirror the tags.cnrm.cloud.google.com/v1beta1 TagsTagBinding spec.",
+  "properties": {
+    "parentRef": {
+      "description": "ParentRef is a reference to a parent resource. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "Allowed value: string of the format `//cloudresourcemanager.googleapis.com/projects/{{value}}`, where {{value}} is the `number` field of a `Project` resource.",
+          "type": "string"
+        },
+        "kind": {
+          "description": "Kind to which we are binding the tag.  Defaults to Project if not specified.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "The service-generated name of the resource. Used for acquisition only. Leave unset to create a new resource.",
+      "type": "string"
+    },
+    "tagValueRef": {
+      "description": "TagsTagValueRef is a reference to a TagsTagValue resource. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed TagsTagValue resource. Should be in the format \"tagValues/{{tagValueID}}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a TagsTagValue resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a TagsTagValue resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "parentRef",
+    "tagValueRef"
+  ],
+  "title": "GCP Tags TagsTagBinding",
+  "type": "object"
+}

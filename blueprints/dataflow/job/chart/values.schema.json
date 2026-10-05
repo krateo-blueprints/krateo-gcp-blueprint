@@ -1,0 +1,142 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Dataflow DataflowJob via Config Connector. Fields mirror the dataflow.cnrm.cloud.google.com/v1beta1 DataflowJob spec.",
+  "properties": {
+    "additionalExperiments": {
+      "description": "List of experiments that should be used by the job. An example value is [\"enable_stackdriver_agent_metrics\"].",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "enableStreamingEngine": {
+      "description": "Indicates if the job should use the streaming engine feature.",
+      "type": "boolean"
+    },
+    "ipConfiguration": {
+      "description": "The configuration for VM IPs. Options are \"WORKER_IP_PUBLIC\" or \"WORKER_IP_PRIVATE\".",
+      "type": "string"
+    },
+    "kmsKeyRef": {
+      "description": "The name for the Cloud KMS key for the job. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed KMSCryptoKey. Should be in the format `projects/[kms_project_id]/locations/[region]/keyRings/[key_ring_id]/cryptoKeys/[key]`.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The `name` of a `KMSCryptoKey` resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The `namespace` of a `KMSCryptoKey` resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "machineType": {
+      "description": "The machine type to use for the job.",
+      "type": "string"
+    },
+    "maxWorkers": {
+      "description": "Immutable. The number of workers permitted to work on the job. More workers may improve processing speed at additional cost.",
+      "format": "int64",
+      "type": "integer"
+    },
+    "networkRef": {
+      "description": "ComputeNetworkRef is a reference to a GCP ComputeNetwork. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed ComputeNetwork resource. Should be in the format \"projects/{{projectID}}/global/networks/{{networkID}}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a ComputeNetwork resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a ComputeNetwork resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "parameters": {
+      "description": "Key/Value pairs to be passed to the Dataflow job (as used in the template).",
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "region": {
+      "description": "Immutable. The region in which the created job should run.",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    },
+    "serviceAccountRef": {
+      "description": "Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The `email` field of an `IAMServiceAccount` resource.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "subnetworkRef": {
+      "description": "ComputeSubnetworkRef is a reference to a GCP ComputeSubnetwork. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed ComputeSubnetwork resource. Should be in the format \"projects/{{projectID}}/regions/{{region}}/subnetworks/{{subnetworkID}}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a ComputeSubnetwork resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a ComputeSubnetwork resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "tempGcsLocation": {
+      "description": "A writeable location on Google Cloud Storage for the Dataflow job to dump its temporary data.",
+      "type": "string"
+    },
+    "templateGcsPath": {
+      "description": "The Google Cloud Storage path to the Dataflow job template.",
+      "type": "string"
+    },
+    "transformNameMapping": {
+      "description": "Only applicable when updating a pipeline. Map of transform name prefixes of the job to be replaced with the corresponding name prefixes of the new job.",
+      "type": "object"
+    },
+    "zone": {
+      "description": "Immutable. The zone in which the created job should run. If it is not provided, the provider zone is used.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tempGcsLocation",
+    "templateGcsPath"
+  ],
+  "title": "GCP Dataflow DataflowJob",
+  "type": "object"
+}

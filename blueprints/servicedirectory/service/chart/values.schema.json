@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Servicedirectory ServiceDirectoryService via Config Connector. Fields mirror the servicedirectory.cnrm.cloud.google.com/v1beta1 ServiceDirectoryService spec.",
+  "properties": {
+    "namespaceRef": {
+      "description": "The ServiceDirectoryNamespace that this service belongs to. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed ServiceDirectoryNamespace resource. Should be in the format \"projects/{{projectID}}/locations/{{location}}/namespaces/{{namespaceID}}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a ServiceDirectoryNamespace resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a ServiceDirectoryNamespace resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The serviceId of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "namespaceRef"
+  ],
+  "title": "GCP Servicedirectory ServiceDirectoryService",
+  "type": "object"
+}

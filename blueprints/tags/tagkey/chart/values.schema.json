@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Tags TagsTagKey via Config Connector. Fields mirror the tags.cnrm.cloud.google.com/v1beta1 TagsTagKey spec.",
+  "properties": {
+    "description": {
+      "description": "Optional. User-assigned description of the TagKey. Must not exceed 256\n characters.\n\n Read-write.",
+      "type": "string"
+    },
+    "parent": {
+      "description": "Immutable. The resource name of the TagKey's parent. A TagKey can be parented by an Organization or a Project. For a TagKey parented by an Organization, its parent must be in the form `organizations/{org_id}`. For a TagKey parented by a Project, its parent can be in the form `projects/{project_id}` or `projects/{project_number}`.",
+      "type": "string"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "purpose": {
+      "description": "Optional. A purpose denotes that this Tag is intended for use in policies\n of a specific policy engine, and will involve that policy engine in\n management operations involving this Tag. A purpose does not grant a\n policy engine exclusive rights to the Tag, and it may be referenced by\n other policy engines.\n\n A purpose cannot be changed once set.",
+      "type": "string"
+    },
+    "purposeData": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Optional. Purpose data corresponds to the policy system that the tag is\n intended for. See documentation for `Purpose` for formatting of this field.\n\n Purpose data cannot be changed once set.",
+      "type": "object"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The service-generated name of the resource. Used for acquisition only. Leave unset to create a new resource.",
+      "type": "string"
+    },
+    "shortName": {
+      "description": "Required. Immutable. The user friendly name for a TagKey. The short name\n should be unique for TagKeys within the same tag namespace.\n\n The short name must be 1-63 characters, beginning and ending with\n an alphanumeric character ([a-z0-9A-Z]) with dashes (-), underscores (_),\n dots (.), and alphanumerics between.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "parent",
+    "shortName"
+  ],
+  "title": "GCP Tags TagsTagKey",
+  "type": "object"
+}

@@ -1,0 +1,17 @@
+apiVersion: v2
+# The Google Config Connector operator, repackaged from the upstream release bundle (1.99.0).
+#
+# The operator itself does not talk to Google Cloud. Applying a ConfigConnector CR makes it
+# install the ~635 Google resource CRDs and run a controller manager that does.
+#
+# Requires krateo-gcp-configconnector-crds to be installed first.
+name: krateo-gcp-configconnector
+description: The Google Config Connector operator, for provisioning Google Cloud resources from Krateo Compositions.
+type: application
+version: CHART_VERSION
+appVersion: "1.99.0"
+home: https://krateo.io
+sources:
+  - https://github.com/krateo-blueprints/krateo-gcp-blueprint
+annotations:
+  krateoSupportedVersion: "2.7.0"

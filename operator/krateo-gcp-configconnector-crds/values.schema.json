@@ -1,0 +1,7 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "Google Config Connector CRDs",
+  "description": "CRDs for Google Config Connector. This chart takes no configuration.",
+  "properties": {}
+}

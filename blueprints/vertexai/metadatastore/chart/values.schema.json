@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Vertexai VertexAIMetadataStore via Config Connector. Fields mirror the vertexai.cnrm.cloud.google.com/v1beta1 VertexAIMetadataStore spec.",
+  "properties": {
+    "dataplexConfig": {
+      "description": "Optional. Dataplex integration settings.",
+      "properties": {
+        "enabledPipelinesLineage": {
+          "description": "Optional. Whether or not Data Lineage synchronization is enabled for Vertex Pipelines.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "description": {
+      "description": "Description of the MetadataStore.",
+      "type": "string"
+    },
+    "encryptionSpec": {
+      "description": "Customer-managed encryption key spec for a Metadata Store. If set, this Metadata Store and all sub-resources of this Metadata Store are secured using this key.",
+      "properties": {
+        "kmsKeyRef": {
+          "description": "Required. The Cloud KMS resource identifier of the customer managed encryption key used to protect a resource. The key needs to be in the same region as where the compute resource is created. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+          "properties": {
+            "external": {
+              "description": "A reference to an externally managed KMSCryptoKey. Should be in the format `projects/[kms_project_id]/locations/[region]/keyRings/[key_ring_id]/cryptoKeys/[key]`.",
+              "type": "string"
+            },
+            "name": {
+              "description": "The `name` of a `KMSCryptoKey` resource.",
+              "type": "string"
+            },
+            "namespace": {
+              "description": "The `namespace` of a `KMSCryptoKey` resource.",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "required": [
+        "kmsKeyRef"
+      ],
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "projectRef": {
+      "description": "The project that this resource belongs to. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The `projectID` field of a project, when not managed by Config Connector.",
+          "type": "string"
+        },
+        "kind": {
+          "description": "The kind of the Project resource; optional but must be `Project` if provided.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The `name` field of a `Project` resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The `namespace` field of a `Project` resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "region": {
+      "description": "The region of the Metadata Store. eg us-central1.",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "The VertexAIMetadataStore name. If not given, the metadata.name will be used.",
+      "type": "string"
+    }
+  },
+  "title": "GCP Vertexai VertexAIMetadataStore",
+  "type": "object"
+}

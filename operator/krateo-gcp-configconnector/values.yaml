@@ -1,0 +1,23 @@
+operator:
+  # Pinned to the digest-tagged image shipped in the 1.99.0 release bundle. Exposed as a value
+  # so the installer's global.imageRegistry mirror pattern can reach it.
+  image: gcr.io/gke-release/cnrm/operator:cb81985
+
+configConnector:
+  # Create the cluster-scoped ConfigConnector CR. Turning this off installs the operator only.
+  enabled: true
+
+  # cluster | namespaced
+  #
+  # cluster    one Google service account for the whole cluster; authenticates with EITHER
+  #            credentialSecretName (a service-account key) OR googleServiceAccount
+  #            (Workload Identity), never both.
+  # namespaced a ConfigConnectorContext per namespace, each naming a googleServiceAccount.
+  #            Workload Identity ONLY -- namespaced mode has no key-based option.
+  mode: cluster
+
+  # Name of the Secret holding the service-account key. Cluster mode only.
+  credentialSecretName: gcp-key
+
+  # Workload Identity service account. Mutually exclusive with credentialSecretName.
+  googleServiceAccount: ""

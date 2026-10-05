@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Compute ComputeProjectMetadata via Config Connector. Fields mirror the compute.cnrm.cloud.google.com/v1beta1 ComputeProjectMetadata spec.",
+  "properties": {
+    "metadata": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "A series of key value pairs.",
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    }
+  },
+  "required": [
+    "metadata"
+  ],
+  "title": "GCP Compute ComputeProjectMetadata",
+  "type": "object"
+}

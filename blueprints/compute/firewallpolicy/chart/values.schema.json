@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Compute ComputeFirewallPolicy via Config Connector. Fields mirror the compute.cnrm.cloud.google.com/v1beta1 ComputeFirewallPolicy spec.",
+  "properties": {
+    "description": {
+      "description": "An optional description of this resource. Provide this property when you create the resource.",
+      "type": "string"
+    },
+    "folderRef": {
+      "description": "Immutable. The Folder that this resource belongs to. Only one of [folderRef, organizationRef] may be specified. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The 'name' field of a folder, when not managed by Config Connector. The recommended format is \"folders/{folderID}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The 'name' field of a 'Folder' resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The 'namespace' field of a 'Folder' resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "organizationRef": {
+      "description": "Immutable. The Organization that this resource belongs to. Only one of [folderRef, organizationRef] may be specified. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The 'name' field of an organization, when not managed by Config Connector.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The 'name' field of an 'Organization' resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The 'namespace' field of an 'Organization' resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The service-generated name of the resource. Used for acquisition only. Leave unset to create a new resource.",
+      "type": "string"
+    },
+    "shortName": {
+      "description": "Immutable. User-provided name of the Organization firewall policy. The name should be unique in the organization in which the firewall policy is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "shortName"
+  ],
+  "title": "GCP Compute ComputeFirewallPolicy",
+  "type": "object"
+}

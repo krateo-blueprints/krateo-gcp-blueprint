@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Iam IAMServiceAccount via Config Connector. Fields mirror the iam.cnrm.cloud.google.com/v1beta1 IAMServiceAccount spec.",
+  "properties": {
+    "description": {
+      "description": "A text description of the service account. Must be less than or equal to 256 UTF-8 bytes.",
+      "type": "string"
+    },
+    "disabled": {
+      "description": "Whether the service account is disabled. Defaults to false.",
+      "type": "boolean"
+    },
+    "displayName": {
+      "description": "The display name for the service account. Can be updated without creating a new resource.",
+      "type": "string"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The accountId of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    }
+  },
+  "title": "GCP Iam IAMServiceAccount",
+  "type": "object"
+}

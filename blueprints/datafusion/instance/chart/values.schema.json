@@ -1,0 +1,111 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Datafusion DataFusionInstance via Config Connector. Fields mirror the datafusion.cnrm.cloud.google.com/v1beta1 DataFusionInstance spec.",
+  "properties": {
+    "dataprocServiceAccountRef": {
+      "description": "Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "User-managed service account to set on Dataproc when Cloud Data Fusion creates Dataproc to run data processing pipelines. This allows users to have fine-grained access control on Dataproc's accesses to cloud resources.\n\nAllowed value: The `email` field of an `IAMServiceAccount` resource.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "description": {
+      "description": "Immutable. A description of this instance.",
+      "type": "string"
+    },
+    "displayName": {
+      "description": "Immutable. Display name for an instance.",
+      "type": "string"
+    },
+    "enableStackdriverLogging": {
+      "description": "Option to enable Stackdriver Logging.",
+      "type": "boolean"
+    },
+    "enableStackdriverMonitoring": {
+      "description": "Option to enable Stackdriver Monitoring.",
+      "type": "boolean"
+    },
+    "location": {
+      "description": "Immutable. The location for the resource",
+      "type": "string"
+    },
+    "networkConfig": {
+      "description": "Immutable. Network configuration options. These are required when a private Data Fusion instance is to be created.",
+      "properties": {
+        "ipAllocation": {
+          "description": "Immutable. The IP range in CIDR notation to use for the managed Data Fusion instance nodes. This range must not overlap with any other ranges used in the customer network.",
+          "type": "string"
+        },
+        "networkRef": {
+          "description": "Immutable. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+          "properties": {
+            "external": {
+              "description": "Name of the network in the customer project with which the Tenant Project will be peered for executing pipelines. In case of shared VPC where the network resides in another host project the network should specified in the form of projects/{host-project-id}/global/networks/{network}\n\nAllowed value: The Google Cloud resource name of a `ComputeNetwork` resource (format: `projects/{{project}}/global/networks/{{name}}`).",
+              "type": "string"
+            },
+            "name": {
+              "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+              "type": "string"
+            },
+            "namespace": {
+              "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "options": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Immutable. Map of additional options used to configure the behavior of Data Fusion instance.",
+      "type": "object"
+    },
+    "privateInstance": {
+      "description": "Immutable. Specifies whether the Data Fusion instance should be private. If set to true, all Data Fusion nodes will have private IP addresses and will not be able to access the public internet.",
+      "type": "boolean"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    },
+    "type": {
+      "description": "Immutable. Required. Instance type. Possible values: TYPE_UNSPECIFIED, BASIC, ENTERPRISE, DEVELOPER",
+      "type": "string"
+    },
+    "version": {
+      "description": "Current version of the Data Fusion.",
+      "type": "string"
+    },
+    "zone": {
+      "description": "Immutable. Name of the zone in which the Data Fusion instance will be created. Only DEVELOPER instances use this field.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "location",
+    "type"
+  ],
+  "title": "GCP Datafusion DataFusionInstance",
+  "type": "object"
+}

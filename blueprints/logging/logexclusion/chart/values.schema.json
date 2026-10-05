@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Logging LoggingLogExclusion via Config Connector. Fields mirror the logging.cnrm.cloud.google.com/v1beta1 LoggingLogExclusion spec.",
+  "properties": {
+    "billingAccountRef": {
+      "description": "Immutable. The BillingAccount that this resource belongs to. Only one of [billingAccountRef, folderRef, organizationRef, projectRef] may be specified. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The 'name' field of a billing account, when not managed by Config Connector.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The 'name' field of a 'BillingAccount' resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The 'namespace' field of a 'BillingAccount' resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "description": {
+      "description": "Optional. A description of this exclusion.",
+      "type": "string"
+    },
+    "disabled": {
+      "description": "Optional. If set to True, then this exclusion is disabled and it does not exclude any log entries. You can update an exclusion to change the value of this field.",
+      "type": "boolean"
+    },
+    "filter": {
+      "description": "Required. An (https://cloud.google.com/logging/docs/view/advanced-queries#sample), you can exclude less than 100% of the matching log entries. For example, the following query matches 99% of low-severity log entries from Google Cloud Storage buckets: `\"resource.type=gcs_bucket severity",
+      "type": "string"
+    },
+    "folderRef": {
+      "description": "Immutable. The Folder that this resource belongs to. Only one of [billingAccountRef, folderRef, organizationRef, projectRef] may be specified. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The 'name' field of a folder, when not managed by Config Connector. The recommended format is \"folders/{folderID}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The 'name' field of a 'Folder' resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The 'namespace' field of a 'Folder' resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "organizationRef": {
+      "description": "Immutable. The Organization that this resource belongs to. Only one of [billingAccountRef, folderRef, organizationRef, projectRef] may be specified. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The 'name' field of an organization, when not managed by Config Connector.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The 'name' field of an 'Organization' resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The 'namespace' field of an 'Organization' resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "projectRef": {
+      "description": "Immutable. The Project that this resource belongs to. Only one of [billingAccountRef, folderRef, organizationRef, projectRef] may be specified. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The `projectID` field of a project, when not managed by Config Connector.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The `name` field of a `Project` resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The `namespace` field of a `Project` resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "filter"
+  ],
+  "title": "GCP Logging LoggingLogExclusion",
+  "type": "object"
+}

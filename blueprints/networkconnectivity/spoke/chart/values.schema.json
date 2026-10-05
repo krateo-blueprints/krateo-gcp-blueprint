@@ -1,0 +1,218 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Networkconnectivity NetworkConnectivitySpoke via Config Connector. Fields mirror the networkconnectivity.cnrm.cloud.google.com/v1beta1 NetworkConnectivitySpoke spec.",
+  "properties": {
+    "description": {
+      "description": "An optional description of the spoke.",
+      "type": "string"
+    },
+    "hubRef": {
+      "description": "Immutable. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "Immutable. The URI of the hub that this spoke is attached to.\n\nAllowed value: The Google Cloud resource name of a `NetworkConnectivityHub` resource (format: `projects/{{project}}/locations/global/hubs/{{name}}`).",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "linkedInterconnectAttachments": {
+      "description": "Immutable. A collection of VLAN attachment resources. These resources should be redundant attachments that all advertise the same prefixes to Google Cloud. Alternatively, in active/passive configurations, all attachments should be capable of advertising the same prefixes.",
+      "properties": {
+        "siteToSiteDataTransfer": {
+          "description": "Immutable. A value that controls whether site-to-site data transfer is enabled for these resources. Note that data transfer is available only in supported locations.",
+          "type": "boolean"
+        },
+        "uris": {
+          "description": "Immutable.",
+          "items": {
+            "description": "Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+            "properties": {
+              "external": {
+                "description": "Allowed value: The `selfLink` field of a `ComputeInterconnectAttachment` resource.",
+                "type": "string"
+              },
+              "name": {
+                "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+                "type": "string"
+              },
+              "namespace": {
+                "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "siteToSiteDataTransfer",
+        "uris"
+      ],
+      "type": "object"
+    },
+    "linkedRouterApplianceInstances": {
+      "description": "Immutable. The URIs of linked Router appliance resources",
+      "properties": {
+        "instances": {
+          "description": "Immutable. The list of router appliance instances",
+          "items": {
+            "properties": {
+              "ipAddress": {
+                "description": "Immutable. The IP address on the VM to use for peering.",
+                "type": "string"
+              },
+              "virtualMachineRef": {
+                "description": "Immutable. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+                "properties": {
+                  "external": {
+                    "description": "The URI of the virtual machine resource\n\nAllowed value: The `selfLink` field of a `ComputeInstance` resource.",
+                    "type": "string"
+                  },
+                  "name": {
+                    "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+                    "type": "string"
+                  },
+                  "namespace": {
+                    "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "siteToSiteDataTransfer": {
+          "description": "Immutable. A value that controls whether site-to-site data transfer is enabled for these resources. Note that data transfer is available only in supported locations.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "instances",
+        "siteToSiteDataTransfer"
+      ],
+      "type": "object"
+    },
+    "linkedVPCNetwork": {
+      "description": "Immutable. VPC network that is associated with the spoke.",
+      "properties": {
+        "excludeExportRanges": {
+          "description": "Immutable. IP ranges encompassing the subnets to be excluded from peering.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "uriRef": {
+          "description": "Immutable. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+          "properties": {
+            "external": {
+              "description": "The URI of the VPC network resource.\n\nAllowed value: The `selfLink` field of a `ComputeNetwork` resource.",
+              "type": "string"
+            },
+            "name": {
+              "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+              "type": "string"
+            },
+            "namespace": {
+              "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "required": [
+        "uriRef"
+      ],
+      "type": "object"
+    },
+    "linkedVpnTunnels": {
+      "description": "Immutable. The URIs of linked VPN tunnel resources",
+      "properties": {
+        "siteToSiteDataTransfer": {
+          "description": "Immutable. A value that controls whether site-to-site data transfer is enabled for these resources. Note that data transfer is available only in supported locations.",
+          "type": "boolean"
+        },
+        "uris": {
+          "description": "Immutable.",
+          "items": {
+            "description": "Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+            "properties": {
+              "external": {
+                "description": "Allowed value: The `selfLink` field of a `ComputeVPNTunnel` resource.",
+                "type": "string"
+              },
+              "name": {
+                "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+                "type": "string"
+              },
+              "namespace": {
+                "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "siteToSiteDataTransfer",
+        "uris"
+      ],
+      "type": "object"
+    },
+    "location": {
+      "description": "Immutable. The location for the resource",
+      "type": "string"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "projectRef": {
+      "description": "Immutable. The Project that this resource belongs to. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The project for the resource\n\nAllowed value: The Google Cloud resource name of a `Project` resource (format: `projects/{{name}}`).",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "hubRef",
+    "location",
+    "projectRef"
+  ],
+  "title": "GCP Networkconnectivity NetworkConnectivitySpoke",
+  "type": "object"
+}

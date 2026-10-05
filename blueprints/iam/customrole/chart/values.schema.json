@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Iam IAMCustomRole via Config Connector. Fields mirror the iam.cnrm.cloud.google.com/v1beta1 IAMCustomRole spec.",
+  "properties": {
+    "description": {
+      "description": "A human-readable description for the role.",
+      "type": "string"
+    },
+    "permissions": {
+      "description": "The names of the permissions this role grants when bound in an IAM policy. At least one permission must be specified.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The roleId of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    },
+    "stage": {
+      "description": "The current launch stage of the role. Defaults to GA.",
+      "type": "string"
+    },
+    "title": {
+      "description": "A human-readable title for the role.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "permissions",
+    "title"
+  ],
+  "title": "GCP Iam IAMCustomRole",
+  "type": "object"
+}

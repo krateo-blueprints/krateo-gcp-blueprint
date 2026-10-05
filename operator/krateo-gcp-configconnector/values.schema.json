@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "Google Config Connector operator",
+  "description": "The Google Config Connector operator and its cluster-scoped ConfigConnector CR.",
+  "properties": {
+    "operator": {
+      "type": "object",
+      "title": "Operator",
+      "properties": {
+        "image": {
+          "type": "string",
+          "title": "Operator image",
+          "description": "Container image for the Config Connector operator.",
+          "minLength": 1
+        }
+      },
+      "required": ["image"]
+    },
+    "configConnector": {
+      "type": "object",
+      "title": "ConfigConnector",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Create the ConfigConnector CR",
+          "description": "When false, installs the operator only and creates no ConfigConnector."
+        },
+        "mode": {
+          "type": "string",
+          "title": "Mode",
+          "description": "cluster uses one Google service account for the whole cluster. namespaced uses a ConfigConnectorContext per namespace and requires Workload Identity.",
+          "enum": ["cluster", "namespaced"]
+        },
+        "credentialSecretName": {
+          "type": "string",
+          "title": "Credential Secret name",
+          "description": "Secret holding the Google service-account key. Cluster mode only, and mutually exclusive with googleServiceAccount."
+        },
+        "googleServiceAccount": {
+          "type": "string",
+          "title": "Workload Identity service account",
+          "description": "Google service account to impersonate via Workload Identity. Mutually exclusive with credentialSecretName."
+        }
+      },
+      "required": ["enabled", "mode"]
+    }
+  },
+  "required": ["operator", "configConnector"]
+}

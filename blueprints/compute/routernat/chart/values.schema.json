@@ -1,0 +1,334 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Compute ComputeRouterNAT via Config Connector. Fields mirror the compute.cnrm.cloud.google.com/v1beta1 ComputeRouterNAT spec.",
+  "properties": {
+    "drainNatIps": {
+      "description": "A list of IP resources to be drained. These IPs must be valid static external IPs that have been assigned to the NAT.",
+      "items": {
+        "description": "ComputeAddressRef is a reference to a GCP ComputeAddress. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+        "properties": {
+          "external": {
+            "description": "A reference to an externally managed ComputeAddress resource. Should be in the format \"projects/{{projectID}}/global/addresses/{{addressID}}\" or \"projects/{{projectID}}/regions/{{region}}/addresses/{{addressID}}\".",
+            "type": "string"
+          },
+          "name": {
+            "description": "The name of a ComputeAddress resource.",
+            "type": "string"
+          },
+          "namespace": {
+            "description": "The namespace of a ComputeAddress resource.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "enableDynamicPortAllocation": {
+      "description": "Enable Dynamic Port Allocation.\nIf minPortsPerVm is set, minPortsPerVm must be set to a power of two greater than or equal to 32.\nIf minPortsPerVm is not set, a minimum of 32 ports will be allocated to a VM from this NAT config.\nIf maxPortsPerVm is set, maxPortsPerVm must be set to a power of two greater than minPortsPerVm.\nIf maxPortsPerVm is not set, a maximum of 65536 ports will be allocated to a VM from this NAT config.\n\nMutually exclusive with enableEndpointIndependentMapping.",
+      "type": "boolean"
+    },
+    "enableEndpointIndependentMapping": {
+      "description": "Specifies if endpoint independent mapping is enabled. This is enabled by default. For more information see the [official documentation](https://cloud.google.com/nat/docs/overview#specs-rfcs).",
+      "type": "boolean"
+    },
+    "endpointTypes": {
+      "description": "Immutable. Specifies the endpoint Types supported by the NAT Gateway. Supported values include: 'ENDPOINT_TYPE_VM', 'ENDPOINT_TYPE_SWG', 'ENDPOINT_TYPE_MANAGED_PROXY_LB'.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "icmpIdleTimeoutSec": {
+      "description": "Timeout (in seconds) for ICMP connections. Defaults to 30s if not set.",
+      "format": "int64",
+      "type": "integer"
+    },
+    "logConfig": {
+      "description": "Configuration for logging on NAT.",
+      "properties": {
+        "enable": {
+          "description": "Indicates whether or not to export logs.",
+          "type": "boolean"
+        },
+        "filter": {
+          "description": "Specifies the desired filtering of logs on this NAT. Possible values: [\"ERRORS_ONLY\", \"TRANSLATIONS_ONLY\", \"ALL\"].",
+          "type": "string"
+        }
+      },
+      "required": [
+        "enable",
+        "filter"
+      ],
+      "type": "object"
+    },
+    "maxPortsPerVm": {
+      "description": "Maximum number of ports allocated to a VM from this NAT. This field can only be set when enableDynamicPortAllocation is enabled.",
+      "format": "int64",
+      "type": "integer"
+    },
+    "minPortsPerVm": {
+      "description": "Minimum number of ports allocated to a VM from this NAT.",
+      "format": "int64",
+      "type": "integer"
+    },
+    "natIpAllocateOption": {
+      "description": "How external IPs should be allocated for this NAT. Valid values are 'AUTO_ONLY' for only allowing NAT IPs allocated by Google Cloud Platform, or 'MANUAL_ONLY' for only user-allocated NAT IP addresses. Possible values: [\"MANUAL_ONLY\", \"AUTO_ONLY\"].",
+      "type": "string"
+    },
+    "natIps": {
+      "description": "NAT IPs. Only valid if natIpAllocateOption is set to MANUAL_ONLY.",
+      "items": {
+        "description": "ComputeAddressRef is a reference to a GCP ComputeAddress. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+        "properties": {
+          "external": {
+            "description": "A reference to an externally managed ComputeAddress resource. Should be in the format \"projects/{{projectID}}/global/addresses/{{addressID}}\" or \"projects/{{projectID}}/regions/{{region}}/addresses/{{addressID}}\".",
+            "type": "string"
+          },
+          "name": {
+            "description": "The name of a ComputeAddress resource.",
+            "type": "string"
+          },
+          "namespace": {
+            "description": "The namespace of a ComputeAddress resource.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "region": {
+      "description": "Immutable. Region where the router and NAT reside.",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    },
+    "routerRef": {
+      "description": "The Cloud Router in which this NAT will be configured. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed ComputeRouter resource. Should be in the format \"projects/{{projectID}}/regions/{{region}}/routers/{{routerID}}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a ComputeRouter resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a ComputeRouter resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "rules": {
+      "description": "A list of rules associated with this NAT.",
+      "items": {
+        "properties": {
+          "action": {
+            "description": "The action to be enforced for traffic that matches this rule.",
+            "properties": {
+              "sourceNatActiveIpsRefs": {
+                "description": "A list of URLs of the IP resources used for this NAT rule. These IP addresses must be valid static external IP addresses assigned to the project. This field is used for public NAT.",
+                "items": {
+                  "description": "ComputeAddressRef is a reference to a GCP ComputeAddress. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+                  "properties": {
+                    "external": {
+                      "description": "A reference to an externally managed ComputeAddress resource. Should be in the format \"projects/{{projectID}}/global/addresses/{{addressID}}\" or \"projects/{{projectID}}/regions/{{region}}/addresses/{{addressID}}\".",
+                      "type": "string"
+                    },
+                    "name": {
+                      "description": "The name of a ComputeAddress resource.",
+                      "type": "string"
+                    },
+                    "namespace": {
+                      "description": "The namespace of a ComputeAddress resource.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "sourceNatActiveRangesRefs": {
+                "description": "A list of references to ComputeSubnetwork resources. Rules configured with these rules translate source IPs to the IP ranges of these subnetworks. This field is used for private NAT.",
+                "items": {
+                  "description": "ComputeSubnetworkRef is a reference to a GCP ComputeSubnetwork. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+                  "properties": {
+                    "external": {
+                      "description": "A reference to an externally managed ComputeSubnetwork resource. Should be in the format \"projects/{{projectID}}/regions/{{region}}/subnetworks/{{subnetworkID}}\".",
+                      "type": "string"
+                    },
+                    "name": {
+                      "description": "The name of a ComputeSubnetwork resource.",
+                      "type": "string"
+                    },
+                    "namespace": {
+                      "description": "The namespace of a ComputeSubnetwork resource.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "sourceNatDrainIpsRefs": {
+                "description": "A list of URLs of the IP resources to be drained. These IPs must be valid static external IPs that have been assigned to the NAT. These IPs should be used for updating/patching a NAT rule only. This field is used for public NAT.",
+                "items": {
+                  "description": "ComputeAddressRef is a reference to a GCP ComputeAddress. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+                  "properties": {
+                    "external": {
+                      "description": "A reference to an externally managed ComputeAddress resource. Should be in the format \"projects/{{projectID}}/global/addresses/{{addressID}}\" or \"projects/{{projectID}}/regions/{{region}}/addresses/{{addressID}}\".",
+                      "type": "string"
+                    },
+                    "name": {
+                      "description": "The name of a ComputeAddress resource.",
+                      "type": "string"
+                    },
+                    "namespace": {
+                      "description": "The namespace of a ComputeAddress resource.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "sourceNatDrainRangesRefs": {
+                "description": "A list of references to ComputeSubnetwork resources. These IP ranges will be drained. This field is used for private NAT.",
+                "items": {
+                  "description": "ComputeSubnetworkRef is a reference to a GCP ComputeSubnetwork. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+                  "properties": {
+                    "external": {
+                      "description": "A reference to an externally managed ComputeSubnetwork resource. Should be in the format \"projects/{{projectID}}/regions/{{region}}/subnetworks/{{subnetworkID}}\".",
+                      "type": "string"
+                    },
+                    "name": {
+                      "description": "The name of a ComputeSubnetwork resource.",
+                      "type": "string"
+                    },
+                    "namespace": {
+                      "description": "The namespace of a ComputeSubnetwork resource.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "description": {
+            "description": "An optional description of this rule.",
+            "type": "string"
+          },
+          "match": {
+            "description": "CEL expression that specifies the match condition that egress traffic from a VM is evaluated against.\nIf it evaluates to true, the corresponding action is enforced.\n\nThe following examples are valid match expressions for public NAT:\n\n\"inIpRange(destination.ip, '1.1.0.0/16') || inIpRange(destination.ip, '2.2.0.0/16')\"\n\n\"destination.ip == '1.1.0.1' || destination.ip == '8.8.8.8'\"\n\nThe following example is a valid match expression for private NAT:\n\n\"nexthop.hub == 'https://networkconnectivity.googleapis.com/v1alpha1/projects/my-project/global/hub/hub-1'\".",
+            "type": "string"
+          },
+          "ruleNumber": {
+            "description": "An integer uniquely identifying a rule in the list. The rule number must be a positive value between 0 and 65000, and must be unique among rules within a NAT.",
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "match",
+          "ruleNumber"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "sourceSubnetworkIpRangesToNat": {
+      "description": "How NAT should be configured per Subnetwork. If 'ALL_SUBNETWORKS_ALL_IP_RANGES', all of the IP ranges in every Subnetwork are allowed to Nat. If 'ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES', all of the primary IP ranges in every Subnetwork are allowed to Nat. 'LIST_OF_SUBNETWORKS': A list of Subnetworks are allowed to Nat (specified in the field subnetwork below). Note that if this field contains ALL_SUBNETWORKS_ALL_IP_RANGES or ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES, then there should not be any other RouterNat section in any Router for this network in this region. Possible values: [\"ALL_SUBNETWORKS_ALL_IP_RANGES\", \"ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES\", \"LIST_OF_SUBNETWORKS\"].",
+      "type": "string"
+    },
+    "subnetwork": {
+      "description": "One or more subnetwork NAT configurations. Only used if 'source_subnetwork_ip_ranges_to_nat' is set to 'LIST_OF_SUBNETWORKS'.",
+      "items": {
+        "properties": {
+          "secondaryIpRangeNames": {
+            "description": "List of the secondary ranges of the subnetwork that are allowed to use NAT. This can be populated only if 'LIST_OF_SECONDARY_IP_RANGES' is one of the values in sourceIpRangesToNat.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "sourceIpRangesToNat": {
+            "description": "List of options for which source IPs in the subnetwork should have NAT enabled. Supported values include: 'ALL_IP_RANGES', 'LIST_OF_SECONDARY_IP_RANGES', 'PRIMARY_IP_RANGE'.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "subnetworkRef": {
+            "description": "The subnetwork to NAT. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+            "properties": {
+              "external": {
+                "description": "A reference to an externally managed ComputeSubnetwork resource. Should be in the format \"projects/{{projectID}}/regions/{{region}}/subnetworks/{{subnetworkID}}\".",
+                "type": "string"
+              },
+              "name": {
+                "description": "The name of a ComputeSubnetwork resource.",
+                "type": "string"
+              },
+              "namespace": {
+                "description": "The namespace of a ComputeSubnetwork resource.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "sourceIpRangesToNat",
+          "subnetworkRef"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "tcpEstablishedIdleTimeoutSec": {
+      "description": "Timeout (in seconds) for TCP established connections. Defaults to 1200s if not set.",
+      "format": "int64",
+      "type": "integer"
+    },
+    "tcpTimeWaitTimeoutSec": {
+      "description": "Timeout (in seconds) for TCP connections that are in TIME_WAIT state. Defaults to 120s if not set.",
+      "format": "int64",
+      "type": "integer"
+    },
+    "tcpTransitoryIdleTimeoutSec": {
+      "description": "Timeout (in seconds) for TCP transitory connections. Defaults to 30s if not set.",
+      "format": "int64",
+      "type": "integer"
+    },
+    "type": {
+      "description": "Immutable. Indicates whether this NAT is used for public IP translation or private IP translation. Possible values: [\"PUBLIC\", \"PRIVATE\"].",
+      "type": "string"
+    },
+    "udpIdleTimeoutSec": {
+      "description": "Timeout (in seconds) for UDP connections. Defaults to 30s if not set.",
+      "format": "int64",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "region",
+    "routerRef",
+    "sourceSubnetworkIpRangesToNat"
+  ],
+  "title": "GCP Compute ComputeRouterNAT",
+  "type": "object"
+}

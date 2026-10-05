@@ -1,0 +1,109 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Gkehub GKEHubFeature via Config Connector. Fields mirror the gkehub.cnrm.cloud.google.com/v1beta1 GKEHubFeature spec.",
+  "properties": {
+    "location": {
+      "description": "Immutable. The location for the resource",
+      "type": "string"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "projectRef": {
+      "description": "Immutable. The Project that this resource belongs to. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The project for the resource\n\nAllowed value: The Google Cloud resource name of a `Project` resource (format: `projects/{{name}}`).",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    },
+    "spec": {
+      "description": "Optional. Hub-wide Feature configuration. If this Feature does not support any Hub-wide configuration, this field may be unused.",
+      "properties": {
+        "fleetobservability": {
+          "description": "Fleet Observability spec.",
+          "properties": {
+            "loggingConfig": {
+              "description": "Fleet Observability Logging-specific spec.",
+              "properties": {
+                "defaultConfig": {
+                  "description": "Specified if applying the default routing config to logs not specified in other configs.",
+                  "properties": {
+                    "mode": {
+                      "description": "The logs routing mode Possible values: MODE_UNSPECIFIED, COPY, MOVE",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "fleetScopeLogsConfig": {
+                  "description": "Specified if applying the routing config to all logs for all fleet scopes.",
+                  "properties": {
+                    "mode": {
+                      "description": "The logs routing mode Possible values: MODE_UNSPECIFIED, COPY, MOVE",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        },
+        "multiclusteringress": {
+          "description": "Multicluster Ingress-specific spec.",
+          "properties": {
+            "configMembershipRef": {
+              "description": "Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+              "properties": {
+                "external": {
+                  "description": "Fully-qualified Membership name which hosts the MultiClusterIngress CRD. Example: `projects/foo-proj/locations/global/memberships/bar`\n\nAllowed value: The Google Cloud resource name of a `GKEHubMembership` resource (format: `projects/{{project}}/locations/{{location}}/memberships/{{name}}`).",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+                  "type": "string"
+                },
+                "namespace": {
+                  "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "required": [
+            "configMembershipRef"
+          ],
+          "type": "object"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "location",
+    "projectRef"
+  ],
+  "title": "GCP Gkehub GKEHubFeature",
+  "type": "object"
+}

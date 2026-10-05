@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Cloudids CloudIDSEndpoint via Config Connector. Fields mirror the cloudids.cnrm.cloud.google.com/v1alpha1 CloudIDSEndpoint spec.",
+  "properties": {
+    "description": {
+      "description": "Immutable. An optional description of the endpoint.",
+      "type": "string"
+    },
+    "location": {
+      "description": "Immutable. The location for the endpoint.",
+      "type": "string"
+    },
+    "networkRef": {
+      "description": "Immutable. Name of the VPC network that is connected\nto the IDS endpoint. This can either contain the VPC network name\nitself (like \"src-net\") or the full URL to the network (like \"projects/{project_id}/global/networks/src-net\"). Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "Allowed value: The `name` field of a `ComputeNetwork` resource.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "projectRef": {
+      "description": "The project that this resource belongs to. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "Allowed value: The `name` field of a `Project` resource.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    },
+    "severity": {
+      "description": "Immutable. The minimum alert severity level that is reported by the endpoint. Possible values: [\"INFORMATIONAL\", \"LOW\", \"MEDIUM\", \"HIGH\", \"CRITICAL\"].",
+      "type": "string"
+    },
+    "threatExceptions": {
+      "description": "Configuration for threat IDs excluded from generating alerts. Limit: 99 IDs.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "location",
+    "networkRef",
+    "projectRef",
+    "severity"
+  ],
+  "title": "GCP Cloudids CloudIDSEndpoint",
+  "type": "object"
+}

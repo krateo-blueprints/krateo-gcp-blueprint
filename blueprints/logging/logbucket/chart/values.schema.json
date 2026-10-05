@@ -1,0 +1,114 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Logging LoggingLogBucket via Config Connector. Fields mirror the logging.cnrm.cloud.google.com/v1beta1 LoggingLogBucket spec.",
+  "properties": {
+    "billingAccountRef": {
+      "description": "Immutable. The BillingAccount that this resource belongs to. Only one of [billingAccountRef, folderRef, organizationRef, projectRef] may be specified. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The 'name' field of a billing account, when not managed by Config Connector.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The 'name' field of a 'BillingAccount' resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The 'namespace' field of a 'BillingAccount' resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "description": {
+      "description": "Describes this bucket.",
+      "type": "string"
+    },
+    "enableAnalytics": {
+      "description": "Whether or not Log Analytics is enabled. Logs for buckets with Log Analytics enabled can be queried in the Log Analytics page using SQL queries. Cannot be disabled once enabled.",
+      "type": "boolean"
+    },
+    "folderRef": {
+      "description": "Immutable. The Folder that this resource belongs to. Only one of [billingAccountRef, folderRef, organizationRef, projectRef] may be specified. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The 'name' field of a folder, when not managed by Config Connector. The recommended format is \"folders/{folderID}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The 'name' field of a 'Folder' resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The 'namespace' field of a 'Folder' resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "location": {
+      "description": "Immutable. The location of the resource. The supported locations are: global, us-central1, us-east1, us-west1, asia-east1, europe-west1.",
+      "type": "string"
+    },
+    "locked": {
+      "description": "Whether the bucket has been locked. The retention period on a locked bucket may not be changed. Locked buckets may only be deleted if they are empty.",
+      "type": "boolean"
+    },
+    "organizationRef": {
+      "description": "Immutable. The Organization that this resource belongs to. Only one of [billingAccountRef, folderRef, organizationRef, projectRef] may be specified. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The 'name' field of an organization, when not managed by Config Connector.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The 'name' field of an 'Organization' resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The 'namespace' field of an 'Organization' resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "projectRef": {
+      "description": "Immutable. The Project that this resource belongs to. Only one of [billingAccountRef, folderRef, organizationRef, projectRef] may be specified. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The `projectID` field of a project, when not managed by Config Connector.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The `name` field of a `Project` resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The `namespace` field of a `Project` resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    },
+    "retentionDays": {
+      "description": "Logs will be retained by default for this amount of time, after which they will automatically be deleted. The minimum retention period is 1 day. If this value is set to zero at bucket creation time, the default time of 30 days will be used.",
+      "format": "int64",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "location"
+  ],
+  "title": "GCP Logging LoggingLogBucket",
+  "type": "object"
+}

@@ -1,0 +1,98 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Vertexai VertexAIEndpoint via Config Connector. Fields mirror the vertexai.cnrm.cloud.google.com/v1alpha1 VertexAIEndpoint spec.",
+  "properties": {
+    "description": {
+      "description": "The description of the Endpoint.",
+      "type": "string"
+    },
+    "displayName": {
+      "description": "Required. The display name of the Endpoint. The name can be up to 128 characters long and can consist of any UTF-8 characters.",
+      "type": "string"
+    },
+    "encryptionSpec": {
+      "description": "Immutable. Customer-managed encryption key spec for an Endpoint. If set, this Endpoint and all sub-resources of this Endpoint will be secured by this key.",
+      "properties": {
+        "kmsKeyNameRef": {
+          "description": "Required. The Cloud KMS resource identifier of the customer managed encryption key used to protect a resource.\nHas the form: projects/my-project/locations/my-region/keyRings/my-kr/cryptoKeys/my-key.\nThe key needs to be in the same region as where the compute resource is created. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+          "properties": {
+            "external": {
+              "description": "Allowed value: The `selfLink` field of a `KMSCryptoKey` resource.",
+              "type": "string"
+            },
+            "name": {
+              "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+              "type": "string"
+            },
+            "namespace": {
+              "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "required": [
+        "kmsKeyNameRef"
+      ],
+      "type": "object"
+    },
+    "networkRef": {
+      "description": "Optional. The full name of the Google Compute Engine network to which the Endpoint should be peered.\nPrivate services access must already be configured for the network. If left unspecified, the Endpoint is not peered with any network.\nOnly one of the fields, network or enablePrivateServiceConnect, can be set.\nFormat: projects/{project_id}/global/networks/{network_name}. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "Allowed value: string of the format `projects/{{project}}/global/networks/{{value}}`, where {{value}} is the `name` field of a `ComputeNetwork` resource.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "projectRef": {
+      "description": "The project that this resource belongs to. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "Allowed value: The `name` field of a `Project` resource.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "region": {
+      "description": "Immutable. The region for the resource.",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "displayName",
+    "projectRef",
+    "region"
+  ],
+  "title": "GCP Vertexai VertexAIEndpoint",
+  "type": "object"
+}

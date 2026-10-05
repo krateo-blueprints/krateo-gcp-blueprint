@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Resourcemanager Folder via Config Connector. Fields mirror the resourcemanager.cnrm.cloud.google.com/v1beta1 Folder spec.",
+  "properties": {
+    "displayName": {
+      "description": "The folder's display name. A folder's display name must be unique amongst its siblings, e.g. no two folders with the same parent can share the same display name. The display name must start and end with a letter or digit, may contain letters, digits, spaces, hyphens and underscores and can be no longer than 30 characters.",
+      "type": "string"
+    },
+    "folderRef": {
+      "description": "The folder that this resource belongs to. Changing this forces the resource to be migrated to the newly specified folder. Only one of folderRef or organizationRef may be specified. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The 'name' field of a folder, when not managed by Config Connector. This field must be set when 'name' field is not set.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The 'name' field of a 'Folder' resource. This field must be set when 'external' field is not set.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The 'namespace' field of a 'Folder' resource. If unset, the namespace is defaulted to the namespace of the referencer resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "organizationRef": {
+      "description": "The organization that this resource belongs to. Changing this forces the resource to be migrated to the newly specified organization. Only one of folderRef or organizationRef may be specified. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The 'name' field of an organization, when not managed by Config Connector.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The 'name' field of an 'Organization' resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The 'namespace' field of an 'Organization' resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The service-generated name of the resource. Used for acquisition only. Leave unset to create a new resource.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "displayName"
+  ],
+  "title": "GCP Resourcemanager Folder",
+  "type": "object"
+}

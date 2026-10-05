@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Secretmanager SecretManagerSecretVersion via Config Connector. Fields mirror the secretmanager.cnrm.cloud.google.com/v1beta1 SecretManagerSecretVersion spec.",
+  "properties": {
+    "deletionPolicy": {
+      "description": "DEPRECATED. You do not need to set this field in direct reconciler mode. Use delete-policy annotation instead. https://cloud.google.com/config-connector/docs/how-to/managing-deleting-resources#keeping_resources_after_deletion The deletion policy for the secret version. Setting 'ABANDON' allows the resource to be abandoned rather than deleted. Setting 'DISABLE' allows the resource to be disabled rather than deleted. Default is 'DELETE'. Possible values are: * DELETE * DISABLE * ABANDON.",
+      "type": "string"
+    },
+    "enabled": {
+      "description": "Should enable or disable the current SecretVersion. - Enabled version can be accessed and described. - Disabled version cannot be accessed, but the secret's contents still exist",
+      "type": "boolean"
+    },
+    "isSecretDataBase64": {
+      "description": "DEPRECATED. You do not need to set this field in direct reconciler mode.",
+      "type": "boolean"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "The service-generated SecretVersion number. If given, Config Connector acquires the resource from the Secret Manager service. If not given, Config Connector adds a new secret version to the GCP service, and you can find out the version number from `status.observedState.version`",
+      "type": "string"
+    },
+    "secretData": {
+      "description": "The actual secret data. Config Connector supports secret data stored in Kubernetes secret or plain data (base64)",
+      "properties": {
+        "value": {
+          "description": "Value of the field. Cannot be used if 'valueFrom' is specified.",
+          "type": "string"
+        },
+        "valueFrom": {
+          "description": "Source for the field's value. Cannot be used if 'value' is specified.",
+          "properties": {
+            "secretKeyRef": {
+              "description": "Reference to a value with the given key in the given Secret in the resource's namespace.",
+              "properties": {
+                "key": {
+                  "description": "Key that identifies the value to be extracted.",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "Name of the Secret to extract a value from.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "key",
+                "name"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "secretRef": {
+      "description": "The resource name of the [Secret][google.cloud.secretmanager.v1.Secret] to create a [SecretVersion][google.cloud.secretmanager.v1.SecretVersion] for. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed SecretManagerSecret resource. Should be in the format \"projects/{{projectID}}/locations/{{location}}/secrets/{{secretID}}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a SecretManagerSecret resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a SecretManagerSecret resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "title": "GCP Secretmanager SecretManagerSecretVersion",
+  "type": "object"
+}

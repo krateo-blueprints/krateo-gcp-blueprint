@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Iap IAPIdentityAwareProxyClient via Config Connector. Fields mirror the iap.cnrm.cloud.google.com/v1beta1 IAPIdentityAwareProxyClient spec.",
+  "properties": {
+    "brandRef": {
+      "description": "Immutable. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "The brand for the resource\n\nAllowed value: The Google Cloud resource name of an `IAPBrand` resource (format: `projects/{{project}}/brands/{{name}}`).",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "displayName": {
+      "description": "Immutable. Human-friendly name given to the OAuth client.",
+      "type": "string"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The service-generated name of the resource. Used for acquisition only. Leave unset to create a new resource.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "brandRef"
+  ],
+  "title": "GCP Iap IAPIdentityAwareProxyClient",
+  "type": "object"
+}

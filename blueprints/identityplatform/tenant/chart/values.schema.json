@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Identityplatform IdentityPlatformTenant via Config Connector. Fields mirror the identityplatform.cnrm.cloud.google.com/v1beta1 IdentityPlatformTenant spec.",
+  "properties": {
+    "allowPasswordSignup": {
+      "description": "Whether to allow email/password user authentication.",
+      "type": "boolean"
+    },
+    "disableAuth": {
+      "description": "Whether authentication is disabled for the tenant. If true, the users under the disabled tenant are not allowed to sign-in. Admins of the disabled tenant are not able to manage its users.",
+      "type": "boolean"
+    },
+    "displayName": {
+      "description": "Display name of the tenant.",
+      "type": "string"
+    },
+    "enableAnonymousUser": {
+      "description": "Whether to enable anonymous user authentication.",
+      "type": "boolean"
+    },
+    "enableEmailLinkSignin": {
+      "description": "Whether to enable email link user authentication.",
+      "type": "boolean"
+    },
+    "mfaConfig": {
+      "description": "The tenant-level configuration of MFA options.",
+      "properties": {
+        "enabledProviders": {
+          "description": "A list of usable second factors for this project.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "state": {
+          "description": "Whether MultiFactor Authentication has been enabled for this project. Possible values: STATE_UNSPECIFIED, DISABLED, ENABLED, MANDATORY",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The service-generated name of the resource. Used for acquisition only. Leave unset to create a new resource.",
+      "type": "string"
+    },
+    "testPhoneNumbers": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "A map of \u003ctest phone number, fake code\u003e pairs that can be used for MFA. The phone number should be in E.164 format (https://www.itu.int/rec/T-REC-E.164/) and a maximum of 10 pairs can be added (error will be thrown once exceeded).",
+      "type": "object"
+    }
+  },
+  "title": "GCP Identityplatform IdentityPlatformTenant",
+  "type": "object"
+}

@@ -1,0 +1,19 @@
+# Verbatim from the Config Connector operator release bundle (1.99.0),
+# except the container image, which is a values knob so the installer's
+# global.imageRegistry mirror pattern can reach it. Upstream is repackaged, never patched.
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    cnrm.cloud.google.com/operator-version: 1.99.0
+  labels:
+    cnrm.cloud.google.com/operator-system: 'true'
+  name: configconnector-operator-service
+  namespace: configconnector-operator-system
+spec:
+  ports:
+  - name: controller-manager
+    port: 443
+  selector:
+    cnrm.cloud.google.com/component: configconnector-operator
+    cnrm.cloud.google.com/operator-system: 'true'

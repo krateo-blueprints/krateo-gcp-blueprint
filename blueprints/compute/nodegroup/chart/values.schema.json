@@ -1,0 +1,157 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Compute ComputeNodeGroup via Config Connector. Fields mirror the compute.cnrm.cloud.google.com/v1beta1 ComputeNodeGroup spec.",
+  "properties": {
+    "autoscalingPolicy": {
+      "description": "Immutable. If you use sole-tenant nodes for your workloads, you can use the node group autoscaler to automatically manage the sizes of your node groups.",
+      "properties": {
+        "maxNodes": {
+          "description": "Immutable. Maximum size of the node group. Set to a value less than or equal to 100 and greater than or equal to min-nodes.",
+          "format": "int64",
+          "type": "integer"
+        },
+        "minNodes": {
+          "description": "Immutable. Minimum size of the node group. Must be less than or equal to max-nodes. The default value is 0.",
+          "format": "int64",
+          "type": "integer"
+        },
+        "mode": {
+          "description": "Immutable. The autoscaling mode. Set to one of the following: - OFF: Disables the autoscaler. - ON: Enables scaling in and scaling out. - ONLY_SCALE_OUT: Enables only scaling out. You must use this mode if your node groups are configured to restart their hosted VMs on minimal servers. Possible values: [\"OFF\", \"ON\", \"ONLY_SCALE_OUT\"].",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "description": {
+      "description": "Immutable. An optional textual description of the resource.",
+      "type": "string"
+    },
+    "initialSize": {
+      "description": "Immutable. The initial number of nodes in the node group. One of 'initial_size' or 'size' must be specified.",
+      "format": "int64",
+      "type": "integer"
+    },
+    "maintenancePolicy": {
+      "description": "Immutable. Specifies how to handle instances when a node in the group undergoes maintenance. Set to one of: DEFAULT, RESTART_IN_PLACE, or MIGRATE_WITHIN_NODE_GROUP. The default value is DEFAULT.",
+      "type": "string"
+    },
+    "maintenanceWindow": {
+      "description": "Immutable. contains properties for the timeframe of maintenance.",
+      "properties": {
+        "startTime": {
+          "description": "Immutable. instances.start time of the window. This must be in UTC format that resolves to one of 00:00, 04:00, 08:00, 12:00, 16:00, or 20:00. For example, both 13:00-5 and 08:00 are valid.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "startTime"
+      ],
+      "type": "object"
+    },
+    "nodeTemplateRef": {
+      "description": "The node template to which this node group belongs. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "A reference to an externally managed ComputeNodeTemplate resource. Should be in the format \"projects/{{projectID}}/regions/{{region}}/nodeTemplates/{{nodeTemplateID}}\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of a ComputeNodeTemplate resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "The namespace of a ComputeNodeTemplate resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    },
+    "shareSettings": {
+      "description": "Immutable. Share settings for the node group.",
+      "properties": {
+        "projectMap": {
+          "description": "Immutable. A map of project id and project config. This is only valid when shareType's value is SPECIFIC_PROJECTS.",
+          "items": {
+            "properties": {
+              "idRef": {
+                "description": "The key of this project config in the parent map. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+                "properties": {
+                  "external": {
+                    "description": "The `projectID` field of a project, when not managed by Config Connector.",
+                    "type": "string"
+                  },
+                  "name": {
+                    "description": "The `name` field of a `Project` resource.",
+                    "type": "string"
+                  },
+                  "namespace": {
+                    "description": "The `namespace` field of a `Project` resource.",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "projectIdRef": {
+                "description": "The project id/number should be the same as the key of this project config in the project map. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+                "properties": {
+                  "external": {
+                    "description": "The `projectID` field of a project, when not managed by Config Connector.",
+                    "type": "string"
+                  },
+                  "name": {
+                    "description": "The `name` field of a `Project` resource.",
+                    "type": "string"
+                  },
+                  "namespace": {
+                    "description": "The `namespace` field of a `Project` resource.",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "required": [
+              "idRef",
+              "projectIdRef"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "shareType": {
+          "description": "Immutable. Node group sharing type. Possible values: [\"ORGANIZATION\", \"SPECIFIC_PROJECTS\", \"LOCAL\"].",
+          "type": "string"
+        }
+      },
+      "required": [
+        "shareType"
+      ],
+      "type": "object"
+    },
+    "size": {
+      "description": "Immutable. The total number of nodes in the node group. One of 'initial_size' or 'size' must be specified.",
+      "format": "int64",
+      "type": "integer"
+    },
+    "zone": {
+      "description": "Immutable. Zone where this node group is located.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "nodeTemplateRef",
+    "zone"
+  ],
+  "title": "GCP Compute ComputeNodeGroup",
+  "type": "object"
+}

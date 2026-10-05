@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Storage StorageDefaultObjectAccessControl via Config Connector. Fields mirror the storage.cnrm.cloud.google.com/v1beta1 StorageDefaultObjectAccessControl spec.",
+  "properties": {
+    "bucketRef": {
+      "description": "Reference to the bucket. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "Allowed value: The `name` field of a `StorageBucket` resource.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "entity": {
+      "description": "The entity holding the permission, in one of the following forms:\n  * user-{{userId}}\n  * user-{{email}} (such as \"user-liz@example.com\")\n  * group-{{groupId}}\n  * group-{{email}} (such as \"group-example@googlegroups.com\")\n  * domain-{{domain}} (such as \"domain-example.com\")\n  * project-team-{{projectId}}\n  * allUsers\n  * allAuthenticatedUsers.",
+      "type": "string"
+    },
+    "object": {
+      "description": "The name of the object, if applied to an object.",
+      "type": "string"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "role": {
+      "description": "The access permission for the entity. Possible values: [\"OWNER\", \"READER\"].",
+      "type": "string"
+    }
+  },
+  "required": [
+    "bucketRef",
+    "entity",
+    "role"
+  ],
+  "title": "GCP Storage StorageDefaultObjectAccessControl",
+  "type": "object"
+}

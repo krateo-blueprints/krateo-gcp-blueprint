@@ -1,0 +1,122 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Provision a Google Cloud Edgecontainer EdgeContainerNodePool via Config Connector. Fields mirror the edgecontainer.cnrm.cloud.google.com/v1beta1 EdgeContainerNodePool spec.",
+  "properties": {
+    "clusterRef": {
+      "description": "Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "Allowed value: The `name` field of an `EdgeContainerCluster` resource.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "localDiskEncryption": {
+      "description": "Local disk encryption options. This field is only used when enabling CMEK support.",
+      "properties": {
+        "kmsKeyActiveVersion": {
+          "description": "The Cloud KMS CryptoKeyVersion currently in use for protecting node local disks. Only applicable if kmsKey is set.",
+          "type": "string"
+        },
+        "kmsKeyRef": {
+          "description": "Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+          "properties": {
+            "external": {
+              "description": "Allowed value: The `selfLink` field of a `KMSCryptoKey` resource.",
+              "type": "string"
+            },
+            "name": {
+              "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+              "type": "string"
+            },
+            "namespace": {
+              "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "kmsKeyState": {
+          "description": "Availability of the Cloud KMS CryptoKey. If not KEY_AVAILABLE, then nodes may go offline as they cannot access their local data.\nThis can be caused by a lack of permissions to use the key, or if the key is disabled or deleted.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "location": {
+      "description": "Immutable. The location of the resource.",
+      "type": "string"
+    },
+    "machineFilter": {
+      "description": "Only machines matching this filter will be allowed to join the node pool.\nThe filtering language accepts strings like \"name=\u003cname\u003e\", and is\ndocumented in more detail in [AIP-160](https://google.aip.dev/160).",
+      "type": "string"
+    },
+    "nodeConfig": {
+      "description": "Configuration for each node in the NodePool.",
+      "properties": {
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "\"The Kubernetes node labels\".",
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "nodeCount": {
+      "description": "The number of nodes in the pool.",
+      "type": "integer"
+    },
+    "nodeLocation": {
+      "description": "Immutable. Name of the Google Distributed Cloud Edge zone where this node pool will be created. For example: 'us-central1-edge-customer-a'.",
+      "type": "string"
+    },
+    "projectId": {
+      "default": "",
+      "description": "GCP project ID for this resource. Rendered as the cnrm.cloud.google.com/project-id annotation. Leave empty to inherit the project from the namespace (Config Connector falls back to the namespace's project-id annotation, then to the namespace name). Leave empty when this resource's spec already carries a projectRef.",
+      "title": "GCP project ID",
+      "type": "string"
+    },
+    "projectRef": {
+      "description": "The project that this resource belongs to. Set exactly one of `external` (the resource's GCP URI or ID) or `name` (plus optional `namespace`) referencing another Config Connector resource in the cluster.",
+      "properties": {
+        "external": {
+          "description": "Allowed value: The `name` field of a `Project` resource.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "resourceID": {
+      "description": "Immutable. Optional. The name of the resource. Used for creation and acquisition. When unset, the value of `metadata.name` is used as the default.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "clusterRef",
+    "location",
+    "nodeCount",
+    "nodeLocation",
+    "projectRef"
+  ],
+  "title": "GCP Edgecontainer EdgeContainerNodePool",
+  "type": "object"
+}
