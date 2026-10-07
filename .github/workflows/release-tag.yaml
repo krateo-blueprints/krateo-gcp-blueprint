@@ -17,6 +17,8 @@ permissions:
 jobs:
   package-and-push:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.resolve.outputs.version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,9 +27,16 @@ jobs:
         uses: azure/setup-helm@v4
 
       - name: Resolve version and registry
+        id: resolve
         run: |
           echo "VERSION=${GITHUB_REF_NAME}" >> "$GITHUB_ENV"
           echo "OCI_REPO=oci://ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/charts" >> "$GITHUB_ENV"
+          echo "version=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          # Collected per channel for publish-chart.yaml: the Marketplace index is built from the
+          # .tgz this run uploads, NOT from the OCI registry, so a chart pushed to GHCR and never
+          # handed to the publisher stays invisible in the Marketplace. That was the whole reason no
+          # GCP blueprint appeared there.
+          mkdir -p "${RUNNER_TEMP}/charts-dist-blueprints" "${RUNNER_TEMP}/charts-dist-operators"
 
       - name: Log in to GHCR
         run: |
@@ -71,6 +80,13 @@ jobs:
               exit 1
             fi
             echo "Published ${OCI_REPO}/${name}:${VERSION}"
+            # Same bytes to the publisher. operator/ charts are plain Helm charts and go to the
+            # operators channel; blueprints/ carry values.schema.json + compositiondefinition.yaml
+            # and pass the blueprints channel gate.
+            case "${chart}" in
+              operator/*)      cp "${name}-${VERSION}.tgz" "${RUNNER_TEMP}/charts-dist-operators/" ;;
+              blueprints/*)    cp "${name}-${VERSION}.tgz" "${RUNNER_TEMP}/charts-dist-blueprints/" ;;
+            esac
             published=$((published+1))
             echo "::endgroup::"
           done
@@ -81,3 +97,50 @@ jobs:
             echo "::error::no charts published — the chart glob matched nothing"
             exit 1
           fi
+
+      - name: Upload blueprint charts for the publisher
+        uses: actions/upload-artifact@v4
+        with:
+          # Name and layout (.tgz at the artifact root) are what publish-chart.yaml downloads.
+          name: charts-dist-blueprints
+          path: ${{ runner.temp }}/charts-dist-blueprints/*.tgz
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Upload operator charts for the publisher
+        uses: actions/upload-artifact@v4
+        with:
+          name: charts-dist-operators
+          path: ${{ runner.temp }}/charts-dist-operators/*.tgz
+          if-no-files-found: error
+          retention-days: 1
+
+  # krateo-blueprints/charts uploads each package to its Releases and merges its entry into the
+  # channel index on gh-pages, which the Marketplace reads. Called once PER CHANNEL, as that
+  # workflow requires. Neither this repo nor krateo-aws-blueprint called it before, which is why
+  # the blueprints index held 250 hand-seeded AWS entries and no GCP ones at all.
+  publish-blueprints:
+    needs: package-and-push
+    uses: krateo-blueprints/charts/.github/workflows/publish-chart.yaml@main
+    permissions:
+      contents: read
+    with:
+      source_repo: ${{ github.repository }}
+      git_tag: ${{ needs.package-and-push.outputs.version }}
+      channel: blueprints
+      artifact: charts-dist-blueprints
+    secrets:
+      PUBLISH_TOKEN: ${{ secrets.CHARTS_PUBLISH_TOKEN || secrets.RELEASE_FEED_TOKEN }}
+
+  publish-operators:
+    needs: package-and-push
+    uses: krateo-blueprints/charts/.github/workflows/publish-chart.yaml@main
+    permissions:
+      contents: read
+    with:
+      source_repo: ${{ github.repository }}
+      git_tag: ${{ needs.package-and-push.outputs.version }}
+      channel: operators
+      artifact: charts-dist-operators
+    secrets:
+      PUBLISH_TOKEN: ${{ secrets.CHARTS_PUBLISH_TOKEN || secrets.RELEASE_FEED_TOKEN }}
