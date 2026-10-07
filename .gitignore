@@ -1,2 +1,5 @@
 *.tgz
 .DS_Store
+
+# the compiled generator binary (go build ./... drops it here)
+tools/kccgen/kccgen
