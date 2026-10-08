@@ -1,17 +1,18 @@
-# Verbatim from the Config Connector operator release bundle (1.99.0),
+# Verbatim from the Config Connector operator release bundle (1.158.0),
 # except the container image, which is a values knob so the installer's
 # global.imageRegistry mirror pattern can reach it. Upstream is repackaged, never patched.
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   annotations:
-    cnrm.cloud.google.com/operator-version: 1.99.0
+    cnrm.cloud.google.com/operator-version: 1.158.0
   labels:
     cnrm.cloud.google.com/component: configconnector-operator
     cnrm.cloud.google.com/operator-system: 'true'
   name: configconnector-operator
   namespace: configconnector-operator-system
 spec:
+  replicas: 1
   selector:
     matchLabels:
       cnrm.cloud.google.com/component: configconnector-operator
@@ -20,7 +21,7 @@ spec:
   template:
     metadata:
       annotations:
-        cnrm.cloud.google.com/operator-version: 1.99.0
+        cnrm.cloud.google.com/operator-version: 1.158.0
       labels:
         cnrm.cloud.google.com/component: configconnector-operator
         cnrm.cloud.google.com/operator-system: 'true'
@@ -30,6 +31,9 @@ spec:
         - --local-repo=/configconnector-operator/channels
         command:
         - /configconnector-operator/manager
+        env:
+        - name: GOMEMLIMIT
+          value: 900MiB
         image: {{ .Values.operator.image | quote }}
         imagePullPolicy: Always
         name: manager

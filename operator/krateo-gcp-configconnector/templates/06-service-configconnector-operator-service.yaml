@@ -1,11 +1,10 @@
-# Verbatim from the Config Connector operator release bundle (1.99.0),
-# except the container image, which is a values knob so the installer's
-# global.imageRegistry mirror pattern can reach it. Upstream is repackaged, never patched.
+# Verbatim from the Config Connector operator release bundle (1.158.0).
+# Not modified: upstream is repackaged, never patched.
 apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    cnrm.cloud.google.com/operator-version: 1.99.0
+    cnrm.cloud.google.com/operator-version: 1.158.0
   labels:
     cnrm.cloud.google.com/operator-system: 'true'
   name: configconnector-operator-service
