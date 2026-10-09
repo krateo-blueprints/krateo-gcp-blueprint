@@ -1,7 +1,10 @@
 operator:
-  # Pinned to the digest-tagged image shipped in the 1.99.0 release bundle. Exposed as a value
-  # so the installer's global.imageRegistry mirror pattern can reach it.
-  image: gcr.io/gke-release/cnrm/operator:cb81985
+  # The image shipped in the 1.158.0 release bundle. Exposed as a value so the installer's
+  # global.imageRegistry mirror pattern can reach it.
+  #
+  # Upstream moved from a commit-SHA tag (1.99.0 shipped operator:cb81985) to a version tag, so
+  # this now reads as the release it came from rather than as an opaque digest.
+  image: gcr.io/gke-release/cnrm/operator:1.158.0
 
 configConnector:
   # Create the cluster-scoped ConfigConnector CR. Turning this off installs the operator only.
