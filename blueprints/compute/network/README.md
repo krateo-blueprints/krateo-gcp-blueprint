@@ -30,20 +30,25 @@ namespace, or when the spec already carries a `projectRef`.
 
 ## How to install
 
+Register it with the CompositionDefinition attached to a release of this repository, stamped
+with that release's chart version. The `compositiondefinition.yaml` beside this README carries
+the `CHART_VERSION` placeholder, which only the release replaces, so it is not meant to be applied.
+
 ```sh
+VERSION=X.Y.Z   # a release of this repository: https://github.com/krateo-blueprints/krateo-gcp-blueprint/releases
 kubectl create namespace gcp-compute-system
-kubectl apply -f compositiondefinition.yaml   # publishes the GcpComputeNetwork type
+kubectl apply -f "https://github.com/krateo-blueprints/krateo-gcp-blueprint/releases/download/${VERSION}/compositiondefinition-gcp-compute-network.yaml"   # publishes the GcpComputeNetwork type
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `GcpComputeNetwork` Composition type (`composition.krateo.io/v0-1-0`,
-plural `gcpcomputenetworks`), pulling the chart from
-`oci://ghcr.io/krateo-blueprints/charts/gcp-compute-network`.
+This publishes a `GcpComputeNetwork` Composition type (`composition.krateo.io/vX-Y-Z`, the release
+version with dashes, e.g. `0.1.6` → `v0-1-6`; plural `gcpcomputenetworks`), pulling the chart from
+`oci://ghcr.io/krateo-blueprints/charts/gcp-compute-network` at that version.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/vX-Y-Z   # VERSION with dashes, e.g. v0-1-6
 kind: GcpComputeNetwork
 metadata:
   name: my-network
