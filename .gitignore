@@ -3,3 +3,7 @@
 
 # the compiled generator binary (go build ./... drops it here)
 tools/kccgen/kccgen
+
+# Copied from blueprints/<service>/<resource>/compositiondefinition.yaml by release-tag.yaml, after
+# stamping, so the archive carries it. Never committed: the file beside the chart is the only one.
+blueprints/*/*/chart/compositiondefinition.yaml
