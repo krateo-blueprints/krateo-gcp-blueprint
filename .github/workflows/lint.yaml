@@ -5,7 +5,8 @@ name: lint
 on:
   pull_request:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   render:
@@ -47,3 +48,20 @@ jobs:
       - name: go test
         working-directory: tools/kccgen
         run: go test ./...
+
+  # krateo-blueprints/charts PUBLISHING.md, checked on every change rather than first at release,
+  # where a refusal comes after GHCR already holds the version. Above all: every committed
+  # CompositionDefinition carries the CHART_VERSION placeholder. A literal 0.1.0 there passed every
+  # render and shipped in gcp-storage-bucket 0.1.5, installing 0.1.0. release-tag.yaml runs the
+  # same script again, and then over the packaged archives.
+  publishing-standard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install PyYAML
+        run: python3 -m pip install --disable-pip-version-check pyyaml==6.0.2
+      - name: The committed charts follow the publishing standard
+        run: python3 .github/scripts/publishing-gate.py tree .
