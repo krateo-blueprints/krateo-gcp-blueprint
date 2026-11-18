@@ -124,7 +124,7 @@ jobs:
   # the blueprints index held 250 hand-seeded AWS entries and no GCP ones at all.
   publish-blueprints:
     needs: package-and-push
-    uses: krateo-blueprints/charts/.github/workflows/publish-chart.yaml@33c79510d5042e0fcb5227176bd138d993cb4ef6 # 1.2.0
+    uses: krateo-blueprints/charts/.github/workflows/publish-chart.yaml@aea92de356085f50ea45477a4e6ae2b026cd6b14 # 1.4.2
     permissions:
       contents: read
     with:
@@ -137,7 +137,7 @@ jobs:
 
   publish-operators:
     needs: package-and-push
-    uses: krateo-blueprints/charts/.github/workflows/publish-chart.yaml@33c79510d5042e0fcb5227176bd138d993cb4ef6 # 1.2.0
+    uses: krateo-blueprints/charts/.github/workflows/publish-chart.yaml@aea92de356085f50ea45477a4e6ae2b026cd6b14 # 1.4.2
     permissions:
       contents: read
     with:
