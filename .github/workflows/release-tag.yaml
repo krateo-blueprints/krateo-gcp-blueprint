@@ -43,7 +43,19 @@ jobs:
           echo "${{ secrets.GITHUB_TOKEN }}" | \
             helm registry login ghcr.io --username "${{ github.actor }}" --password-stdin
 
+      # krateo-blueprints/charts PUBLISHING.md rule 14: charts are pushed through the organisation's chart-push
+      # action, whose push.sh retries GHCR's tag read-after-write race (and only that) onto the same digest. Locate
+      # mode: it outputs push.sh's path, and the next step runs it once per chart.
+      - name: Locate the shared chart push
+        id: chart-push
+        uses: krateo-platformops/.github/.github/actions/chart-push@653ac1e67d761584993a774c76963514968b3650 # main 2026-11-18
+
       - name: Package and push every chart
+        env:
+          CHART_PUSH: ${{ steps.chart-push.outputs.path }}
+          # push.sh reads the manifest back with these, after the registry login above.
+          REGISTRY_USERNAME: ${{ github.actor }}
+          REGISTRY_PASSWORD: ${{ github.token }}
         run: |
           set -euo pipefail
           # Stamp every CompositionDefinition. They pin their chart's version and live outside
@@ -67,18 +79,9 @@ jobs:
             echo "::group::${name} (${chart})"
             sed -i "s/CHART_VERSION/${VERSION}/g" "${chart}/Chart.yaml"
             helm package "${chart}" --destination .
-            # Retry: that GHCR tag error is transient and a single push failure otherwise
-            # abandons every chart after it.
-            ok=0
-            for attempt in 1 2 3 4 5; do
-              if helm push "${name}-${VERSION}.tgz" "${OCI_REPO}"; then ok=1; break; fi
-              echo "push attempt ${attempt} failed for ${name}; retrying in $((attempt*10))s"
-              sleep $((attempt*10))
-            done
-            if [ "${ok}" -ne 1 ]; then
-              echo "::error::${name} failed to publish after 5 attempts"
-              exit 1
-            fi
+            # No retry loop here: push.sh retries GHCR's tag race (and only that) onto the same digest, and any other
+            # error fails at once, ending this step under set -e (krateo-blueprints/charts PUBLISHING.md rule 14).
+            bash "${CHART_PUSH}" "${name}-${VERSION}.tgz" "${OCI_REPO}"
             echo "Published ${OCI_REPO}/${name}:${VERSION}"
             # Same bytes to the publisher. operator/ charts are plain Helm charts and go to the
             # operators channel; blueprints/ carry values.schema.json + compositiondefinition.yaml
